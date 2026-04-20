@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greytt Weekly Report — Apr 13–19, 2026</title>
+<style>
+:root{
+  --brand:#1E3A5F;--accent:#2E7D9B;--light:#EAF3F7;--mid:#C5D8E5;
+  --green:#166534;--green-bg:#DCFCE7;--green-mid:#16A34A;
+  --amber:#92400E;--amber-bg:#FEF3C7;--amber-mid:#D97706;
+  --red:#991B1B;--red-bg:#FEE2E2;--red-mid:#DC2626;
+  --grey:#374151;--grey-bg:#F3F4F6;--muted:#6B7280;
+  --text:#1F2937;--border:#E5E7EB;--white:#fff;
+  --radius:8px;--radius-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;color:var(--text);background:#F0F4F8;line-height:1.6}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--brand);color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.topbar-left .logo{font-size:15px;font-weight:700;letter-spacing:.3px}
+.topbar-left .sub{font-size:11px;opacity:.65;margin-top:1px}
+.topbar-nav{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.topbar-nav a{color:#fff;opacity:.75;font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,255,255,.25);white-space:nowrap;text-decoration:none;transition:all .15s}
+.topbar-nav a:hover{opacity:1;background:rgba(255,255,255,.15)}
+.dl-btn{background:#fff;color:var(--brand);font-size:11px;font-weight:700;padding:5px 11px;border-radius:5px;text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.dl-btn:hover{background:#dbeafe}
+
+/* ── HERO ── */
+.hero{background:var(--brand);color:#fff;padding:32px 16px 24px;text-align:center}
+.hero-eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:6px}
+.hero h1{font-size:clamp(20px,5vw,32px);font-weight:700;line-height:1.2;margin-bottom:4px}
+.hero h1 em{font-style:italic;opacity:.85}
+.hero-sub{font-size:13px;opacity:.7;margin-bottom:24px}
+.hero-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:680px;margin:0 auto}
+.hkpi{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius);padding:12px 8px;text-align:center}
+.hkpi .v{font-size:clamp(20px,4vw,30px);font-weight:700;line-height:1;display:block}
+.hkpi .l{font-size:10px;opacity:.7;margin-top:3px;display:block;line-height:1.3}
+.hkpi .c{font-size:10px;margin-top:4px;display:block;font-weight:500}
+.cup{color:#86EFAC}.cdn{color:#FCA5A5}.cneu{color:rgba(255,255,255,.55)}
+
+/* ── LAYOUT ── */
+.page{max-width:900px;margin:0 auto;padding:0 12px 40px}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:2px;flex-wrap:wrap;border-bottom:2px solid var(--mid);margin:20px 0 0;background:var(--white);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:8px 8px 0;overflow-x:auto}
+.tab-bar::-webkit-scrollbar{height:3px}.tab-bar::-webkit-scrollbar-thumb{background:var(--mid);border-radius:2px}
+.tb{padding:7px 13px;font-size:12px;cursor:pointer;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;color:var(--muted);background:none;font-family:inherit;white-space:nowrap;transition:all .15s}
+.tb.on{background:var(--white);border-color:var(--mid);border-bottom-color:var(--white);color:var(--brand);font-weight:600;margin-bottom:-2px}
+.tb:hover:not(.on){background:var(--light);color:var(--brand)}
+.panel{display:none;background:var(--white);border:1px solid var(--mid);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:20px 16px}
+.panel.on{display:block}
+
+/* ── SECTION TITLES ── */
+.sec{font-size:16px;font-weight:700;color:var(--brand);margin:20px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--mid);display:flex;align-items:center;gap:8px}
+.sec .pill{font-size:10px;font-weight:500;background:var(--light);color:var(--accent);padding:2px 8px;border-radius:20px;border:1px solid var(--mid)}
+.sec2{font-size:13px;font-weight:600;color:var(--accent);margin:16px 0 8px}
+
+/* ── KPI GRID ── */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px}
+.kcard{background:var(--grey-bg);border-radius:var(--radius-lg);padding:12px 14px;text-align:center;border:1px solid var(--border)}
+.kcard .kv{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.kcard .kl{font-size:11px;color:var(--muted);margin-top:3px}
+.kcard .kc{font-size:10px;margin-top:3px;font-weight:500}
+.up{color:var(--green-mid)}.dn{color:var(--red-mid)}.neu{color:var(--muted)}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.65}
+.callout strong{font-weight:600}
+.callout .ct{font-size:12px;font-weight:700;margin-bottom:4px;display:block}
+.cg{background:var(--green-bg);border-left:3px solid var(--green-mid);color:#14532D}
+.ca{background:var(--amber-bg);border-left:3px solid var(--amber-mid);color:#78350F}
+.cb{background:var(--light);border-left:3px solid var(--accent);color:#1E3A5F}
+.cr{background:var(--red-bg);border-left:3px solid var(--red-mid);color:#7F1D1D}
+
+/* ── BARS ── */
+.bars{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.bar-lbl{width:155px;flex-shrink:0;text-align:right;color:var(--text);line-height:1.3;font-size:12px}
+.bar-track{flex:1;background:var(--grey-bg);border-radius:4px;height:20px;overflow:hidden;min-width:0}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:7px;font-size:11px;font-weight:600;color:#fff;white-space:nowrap}
+.bar-n{width:44px;flex-shrink:0;color:var(--muted);font-size:11px;text-align:right}
+
+/* ── DAILY CHART ── */
+.day-chart{display:flex;align-items:flex-end;gap:6px;height:110px;margin-bottom:6px;padding:0 4px}
+.dc-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.dc-bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0}
+.dc-bar.peak{background:var(--brand)}
+.dc-val{font-size:10px;font-weight:700;color:var(--brand)}
+.dc-lbl{font-size:9px;color:var(--muted);text-align:center;line-height:1.3}
+
+/* ── TABLES ── */
+.tw{overflow-x:auto;margin-bottom:14px;border-radius:var(--radius-lg);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white)}
+th{background:var(--brand);color:#fff;padding:8px 10px;text-align:left;font-weight:500;font-size:11px;white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.4}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#FAFBFC}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:12px;white-space:nowrap}
+.br{background:var(--red-bg);color:var(--red)}.ba{background:var(--amber-bg);color:var(--amber)}
+.bg{background:var(--green-bg);color:var(--green)}.bb{background:var(--light);color:var(--accent)}
+.bgy{background:var(--grey-bg);color:var(--grey)}
+
+/* ── WOW ── */
+.wrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.wrow:last-child{border-bottom:none}
+.wm{color:var(--muted);flex:1}.wp{text-align:right;flex:.5;color:var(--muted)}
+.wc{text-align:right;flex:.5;font-weight:500;color:var(--text)}
+.wch{text-align:right;flex:.45;font-size:11px;font-weight:600}
+.wh{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:4px 0;margin-top:8px}
+
+/* ── TWO COL ── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:540px){
+  .two{grid-template-columns:1fr}
+  .hero-kpis{grid-template-columns:repeat(2,1fr)}
+  .bar-lbl{width:110px}
+  .topbar-nav{display:none}
+}
+
+/* ── RISK TABLE ── */
+.risk-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.risk-item:last-child{border-bottom:none}
+.risk-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.risk-red{background:var(--red-mid)}.risk-amber{background:var(--amber-mid)}.risk-green{background:var(--green-mid)}
+.risk-body .rt{font-size:12px;font-weight:600;color:var(--text)}
+.risk-body .rs{font-size:11px;color:var(--muted);margin-top:2px}
+
+footer{background:var(--brand);color:rgba(255,255,255,.55);font-size:11px;text-align:center;padding:18px 16px;margin-top:0}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">Greytt · Weekly Report</div>
+    <div class="sub">Apr 13 – 19, 2026 &nbsp;·&nbsp; Confidential</div>
+  </div>
+  <nav class="topbar-nav">
+    <a href="javascript:void(0)" onclick="show('s0',this)">Summary</a>
+    <a href="javascript:void(0)" onclick="show('s1',this)">WoW</a>
+    <a href="javascript:void(0)" onclick="show('s2',this)">Itinerary</a>
+    <a href="javascript:void(0)" onclick="show('s3',this)">Destinations</a>
+    <a href="javascript:void(0)" onclick="show('s4',this)">Users</a>
+    <a href="javascript:void(0)" onclick="show('s5',this)">Tech</a>
+    <a href="javascript:void(0)" onclick="show('s6',this)">Bugs</a>
+  </nav>
+  <a class="dl-btn" href="Greytt_Weekly_Report_Apr19_2026.docx" download>⬇ Download</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Greytt &nbsp;·&nbsp; Internal Analytics &nbsp;·&nbsp; Confidential</div>
+  <h1>Weekly <em>Report</em></h1>
+  <div class="hero-sub">Itinerary Analytics &amp; Tech Project Status &nbsp;·&nbsp; April 13 – 19, 2026</div>
+  <div class="hero-kpis">
+    <div class="hkpi"><span class="v">324</span><span class="l">Itineraries</span><span class="c cup">↑ 49% vs prior</span></div>
+    <div class="hkpi"><span class="v">25%</span><span class="l">Registered</span><span class="c cneu">→ stable</span></div>
+    <div class="hkpi"><span class="v">5</span><span class="l">Open Bugs</span><span class="c cup">↓ 1 resolved</span></div>
+    <div class="hkpi"><span class="v">11</span><span class="l">In Progress</span><span class="c cup">↓ 2 from prior</span></div>
+  </div>
+</div>
+
+<div class="page">
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tb on" onclick="show('s0',this)">Summary</button>
+    <button class="tb" onclick="show('s1',this)">Week-on-Week</button>
+    <button class="tb" onclick="show('s2',this)">Itinerary</button>
+    <button class="tb" onclick="show('s3',this)">Destinations</button>
+    <button class="tb" onclick="show('s4',this)">Users</button>
+    <button class="tb" onclick="show('s5',this)">Tech Overview</button>
+    <button class="tb" onclick="show('s6',this)">Bugs</button>
+  </div>
+
+  <!-- ══════ SUMMARY ══════ -->
+  <div id="s0" class="panel on">
+    <div class="sec">&#9632; Week ending April 19, 2026 <span class="pill">vs Apr 6–12 prior week</span></div>
+
+    <div class="sec2">Part 1 — Itinerary Analytics</div>
+    <div class="kgrid">
+      <div class="kcard"><div class="kv">324</div><div class="kl">Itineraries</div><div class="kc up">↑ 49% vs prior</div></div>
+      <div class="kcard"><div class="kv">73%</div><div class="kl">Plan Mode</div><div class="kc up">↑ 3pp</div></div>
+      <div class="kcard"><div class="kv">6.3</div><div class="kl">Avg Trip Days</div><div class="kc neu">→ stable</div></div>
+      <div class="kcard"><div class="kv">25%</div><div class="kl">Registered Users</div><div class="kc neu">→ stable</div></div>
+    </div>
+    <div class="callout cb"><span class="ct">📊 Itinerary Highlights</span>Strong volume rebound — 324 itineraries vs 217 last week, a 49% jump. <strong>Bali stays #1 at 20%</strong>; Bangkok surges back to #2 (14%). Ho Chi Minh breaks into the top 4. India still leads users at 62% but Indonesia and Malaysia consolidate as #2 and #3. May 2026 now the top planned travel month at 34%, overtaking April.</div>
+
+    <div class="sec2">Part 2 — Tech Project Status</div>
+    <div class="kgrid">
+      <div class="kcard"><div class="kv">177</div><div class="kl">Work Items</div><div class="kc up">↑ 19 added</div></div>
+      <div class="kcard"><div class="kv">77%</div><div class="kl">Completed</div><div class="kc neu">137 tasks</div></div>
+      <div class="kcard"><div class="kv">11</div><div class="kl">In Progress</div><div class="kc up">↓ 2 from prior</div></div>
+      <div class="kcard"><div class="kv">5</div><div class="kl">Open Bugs</div><div class="kc up">↓ 1 resolved</div></div>
+    </div>
+    <div class="callout cg"><span class="ct">✅ Delivered This Week</span><strong>Post-edit URL change</strong> pushed to Staging. <strong>Signup confirmation</strong> moved to Production. <strong>BUG_065</strong> (itinerary not resuming after popup) resolved — one of the two critical bugs from last week cleared. Voice Concierge progressing with sub-preference implementation.</div>
+    <div class="callout ca"><span class="ct">⚠ Active Risks</span><strong>5 items remain past their Apr 15 deadline</strong> — Voice Concierge, Score Automation, SuperGryd, DB Images fix, and Cross-Channel Personalisation. Hotel Finder and Chat Enhancement due Apr 22. B2B API now tracked with Apr 22 deadline but still no visible dev activity logged.</div>
+
+    <div class="sec">&#9632; Risks at a Glance</div>
+    <div class="risk-item"><div class="risk-dot risk-red"></div><div class="risk-body"><div class="rt">5 in-progress items past Apr 15 deadline</div><div class="rs">Voice Concierge · Score Automation · SuperGryd · DB fix · Cross-Channel Personalisation — all need revised ETAs this week</div></div></div>
+    <div class="risk-item"><div class="risk-dot risk-red"></div><div class="risk-body"><div class="rt">BUG_069 still open — hotel loading 30–40s lag</div><div class="rs">High priority, visible UX failure, second consecutive week unresolved</div></div></div>
+    <div class="risk-item"><div class="risk-dot risk-amber"></div><div class="risk-body"><div class="rt">Hotel Finder &amp; Chat Enhancement due Apr 22</div><div class="rs">Both approaching deadline — Hotel Finder data is ready but backend check ongoing</div></div></div>
+    <div class="risk-item"><div class="risk-dot risk-amber"></div><div class="risk-body"><div class="rt">BUG_060 — traveler change not updating hotels</div><div class="rs">Medium priority but Major severity — impacts paid user experience</div></div></div>
+    <div class="risk-item"><div class="risk-dot risk-green"></div><div class="risk-body"><div class="rt">Volume recovery strong — 324 itineraries (↑49%)</div><div class="rs">Last week's dip was a 5-day artefact; full week confirms healthy demand momentum</div></div></div>
+  </div>
+
+  <!-- ══════ WEEK-ON-WEEK ══════ -->
+  <div id="s1" class="panel">
+    <div class="sec">&#9632; Week-on-Week Comparison</div>
+    <div class="callout cb" style="margin-bottom:16px"><strong>Context:</strong> Prior week (Apr 6–12) covered only 5 days (Wed–Sun). This week is a full 7-day period (Mon–Sun). Volume comparisons should account for this — adjusted daily rate went from ~43/day to ~46/day, a more modest ~7% increase.</div>
+
+    <div class="two">
+      <div>
+        <div class="sec2" style="margin-top:0">Itinerary Metrics</div>
+        <div class="wh"><span>Metric</span><span>Prior (5d)</span><span>This (7d)</span><span>Δ</span></div>
+        <div class="wrow"><span class="wm">Total Itineraries</span><span class="wp">217</span><span class="wc">324</span><span class="wch up">↑ 49%</span></div>
+        <div class="wrow"><span class="wm">Daily Avg Rate</span><span class="wp">~43/d</span><span class="wc">~46/d</span><span class="wch up">↑ 7%</span></div>
+        <div class="wrow"><span class="wm">Plan Mode Share</span><span class="wp">70%</span><span class="wc">73%</span><span class="wch up">↑ 3pp</span></div>
+        <div class="wrow"><span class="wm">Avg Trip Days</span><span class="wp">6.1d</span><span class="wc">6.3d</span><span class="wch neu">→ stable</span></div>
+        <div class="wrow"><span class="wm">Registered Users</span><span class="wp">26%</span><span class="wc">25%</span><span class="wch dn">↓ 1pp</span></div>
+        <div class="wrow"><span class="wm">India Share</span><span class="wp">54%</span><span class="wc">62%</span><span class="wch dn">↑ 8pp</span></div>
+        <div class="wrow"><span class="wm">Unique Countries</span><span class="wp">31</span><span class="wc">34</span><span class="wch up">↑ 3</span></div>
+        <div class="wrow"><span class="wm">With Children</span><span class="wp">22</span><span class="wc">33</span><span class="wch up">↑ 50%</span></div>
+        <div class="wrow"><span class="wm">5-Star Hotel Share</span><span class="wp">80.2%</span><span class="wc">81.8%</span><span class="wch up">↑ 1.6pp</span></div>
+        <div class="wrow"><span class="wm">Couples (2 adults)</span><span class="wp">83%</span><span class="wc">78%</span><span class="wch dn">↓ 5pp</span></div>
+        <div class="wrow"><span class="wm">With Hotel Recs</span><span class="wp">93%</span><span class="wc">89%</span><span class="wch dn">↓ 4pp</span></div>
+        <div class="wrow"><span class="wm">Itineraries w/ Edits</span><span class="wp">1</span><span class="wc">4</span><span class="wch up">↑ 3</span></div>
+      </div>
+      <div>
+        <div class="sec2" style="margin-top:0">Tech Metrics</div>
+        <div class="wh"><span>Metric</span><span>Prior</span><span>This</span><span>Δ</span></div>
+        <div class="wrow"><span class="wm">Open Bugs</span><span class="wp">6</span><span class="wc">5</span><span class="wch up">↓ 1</span></div>
+        <div class="wrow"><span class="wm">Work Items</span><span class="wp">158</span><span class="wc">177</span><span class="wch up">↑ 19</span></div>
+        <div class="wrow"><span class="wm">In Progress</span><span class="wp">13</span><span class="wc">11</span><span class="wch up">↓ 2</span></div>
+        <div class="wrow"><span class="wm">Completed</span><span class="wp">134</span><span class="wc">137</span><span class="wch up">↑ 3</span></div>
+        <div class="wrow"><span class="wm">Moved to Prod</span><span class="wp">4</span><span class="wc">4</span><span class="wch neu">→</span></div>
+        <div class="wrow"><span class="wm">Moved to Staging</span><span class="wp">2</span><span class="wc">1</span><span class="wch dn">↓ 1</span></div>
+        <div class="wrow"><span class="wm">On Hold</span><span class="wp">2</span><span class="wc">3</span><span class="wch dn">↑ 1 (Klook)</span></div>
+        <div class="wrow"><span class="wm">Overdue Items</span><span class="wp">6</span><span class="wc">5</span><span class="wch up">↓ 1</span></div>
+      </div>
+    </div>
+
+    <div class="sec2">Top Destination Shift</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Destination</th><th>Prior (Apr 6–12)</th><th>This (Apr 13–19)</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Bali, Indonesia</td><td>48 (22.1%)</td><td>64 (19.8%)</td><td class="neu">→ stable</td></tr>
+          <tr><td>Bangkok, Thailand 🔝</td><td>17 (7.8%)</td><td>44 (13.6%)</td><td class="up">↑ 159%</td></tr>
+          <tr><td>Singapore</td><td>17 (7.8%)</td><td>35 (10.8%)</td><td class="up">↑ 106%</td></tr>
+          <tr><td>Ho Chi Minh, Vietnam</td><td>15 (6.9%)</td><td>34 (10.5%)</td><td class="up">↑ 127%</td></tr>
+          <tr><td>Seoul, South Korea</td><td>19 (8.8%)</td><td>30 (9.3%)</td><td class="up">↑ 58%</td></tr>
+          <tr><td>Kuala Lumpur, Malaysia</td><td>22 (10.1%)</td><td>27 (8.3%)</td><td class="dn">↓ slight</td></tr>
+          <tr><td>Tokyo, Japan</td><td>21 (9.7%)</td><td>24 (7.4%)</td><td class="dn">↓ slight</td></tr>
+          <tr><td>Phuket, Thailand</td><td>12 (5.5%)</td><td>22 (6.8%)</td><td class="up">↑ 83%</td></tr>
+          <tr><td>Melbourne, Australia</td><td>6 (2.8%)</td><td>16 (4.9%)</td><td class="up">↑ 167%</td></tr>
+          <tr><td>Mumbai, India</td><td>10 (4.6%)</td><td>12 (3.7%)</td><td class="neu">→ stable</td></tr>
+          <tr><td>Sydney, Australia</td><td>12 (5.5%)</td><td>3 (0.9%)</td><td class="dn">↓ 75%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout cb"><strong>Big movers:</strong> Bangkok surged 159% to reclaim #2 — likely seasonal/promotion driven. Singapore and Ho Chi Minh both more than doubled. Melbourne quietly jumped 167% (though from a low base). Sydney gave back all its prior-week gains. KL and Tokyo gave up share but remain solid mid-tier performers.</div>
+  </div>
+
+  <!-- ══════ ITINERARY ══════ -->
+  <div id="s2" class="panel">
+    <div class="sec">&#9632; Volume &amp; Activity</div>
+
+    <div class="sec2">Daily Itinerary Creation — Apr 13–19, 2026</div>
+    <div style="background:var(--grey-bg);border-radius:var(--radius-lg);padding:16px 12px 10px;margin-bottom:14px">
+      <div class="day-chart">
+        <div class="dc-wrap"><div class="dc-val">43</div><div class="dc-bar" style="height:73%"></div><div class="dc-lbl">Mon<br>Apr 13</div></div>
+        <div class="dc-wrap"><div class="dc-val">38</div><div class="dc-bar" style="height:64%"></div><div class="dc-lbl">Tue<br>Apr 14</div></div>
+        <div class="dc-wrap"><div class="dc-val">49</div><div class="dc-bar" style="height:83%"></div><div class="dc-lbl">Wed<br>Apr 15</div></div>
+        <div class="dc-wrap"><div class="dc-val">44</div><div class="dc-bar" style="height:75%"></div><div class="dc-lbl">Thu<br>Apr 16</div></div>
+        <div class="dc-wrap"><div class="dc-val">53</div><div class="dc-bar" style="height:90%"></div><div class="dc-lbl">Fri<br>Apr 17</div></div>
+        <div class="dc-wrap"><div class="dc-val">38</div><div class="dc-bar" style="height:64%"></div><div class="dc-lbl">Sat<br>Apr 18</div></div>
+        <div class="dc-wrap"><div class="dc-val">59</div><div class="dc-bar peak" style="height:100%"></div><div class="dc-lbl">Sun<br>Apr 19 🔝</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Full 7-day week. Sun Apr 19 peak at 59. Mid-week (Wed–Fri) strong at 49–53. Weekends softer than weekdays this cycle.</div>
+    </div>
+
+    <div class="two">
+      <div>
+        <div class="sec2" style="margin-top:0">Generation Method</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Method</th><th>This Week</th><th>Prior Week</th><th>Δ</th></tr></thead>
+            <tbody>
+              <tr><td>Plan (guided)</td><td>235 (72.5%)</td><td>153 (70.5%)</td><td class="up">↑ 2pp</td></tr>
+              <tr><td>Chat (AI)</td><td>89 (27.5%)</td><td>64 (29.5%)</td><td class="dn">↓ 2pp</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout cb" style="margin-top:0">Plan mode ticked up 2pp to 73% — likely reflects volume recovery among less-technical users. Chat still holds ~28% share, the highest streak over multiple weeks.</div>
+      </div>
+      <div>
+        <div class="sec2" style="margin-top:0">Group Size &amp; Duration</div>
+        <div class="kgrid" style="grid-template-columns:1fr 1fr">
+          <div class="kcard"><div class="kv">6.3</div><div class="kl">Avg trip days</div><div class="kc neu">stable</div></div>
+          <div class="kcard"><div class="kv">5</div><div class="kl">Median days</div><div class="kc neu">stable</div></div>
+          <div class="kcard"><div class="kv">78%</div><div class="kl">Couples</div><div class="kc dn">↓ 5pp</div></div>
+          <div class="kcard"><div class="kv">10%</div><div class="kl">With children</div><div class="kc neu">stable</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec2">Experience Types</div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-lbl">Top Attractions</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1E3A5F">86</div></div><span class="bar-n">26.5%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Relaxed &amp; Chill</span><div class="bar-track"><div class="bar-fill" style="width:86%;background:#2E7D9B">74</div></div><span class="bar-n">22.8%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Adventure &amp; Sport</span><div class="bar-track"><div class="bar-fill" style="width:45%;background:#3A8A7A">39</div></div><span class="bar-n">12.0%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Culture &amp; History</span><div class="bar-track"><div class="bar-fill" style="width:38%;background:#5A7A9A">33</div></div><span class="bar-n">10.2%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Natural Wonders</span><div class="bar-track"><div class="bar-fill" style="width:34%;background:#4A8A6A">29</div></div><span class="bar-n">8.9%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Foodie Explorations</span><div class="bar-track"><div class="bar-fill" style="width:23%;background:#7A6A5A">20</div></div><span class="bar-n">6.2%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Arts &amp; Theatre</span><div class="bar-track"><div class="bar-fill" style="width:19%;background:#8A6A8A">16</div></div><span class="bar-n">4.9%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Shopping Fantasy</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#9A7A6A">12</div></div><span class="bar-n">3.7%</span></div>
+    </div>
+    <div class="callout cb">Arts &amp; Theatre jumps to 16 (from 3 prior week) — Bangkok and Singapore destinations likely driving this. Relaxed &amp; Chill holds a strong #2 at 23%, consistent with the continuing appeal of wellness-focused trips.</div>
+
+    <div class="sec2">Top Traveller Preferences</div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-lbl">Easy Transport</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1E3A5F">260</div></div><span class="bar-n">80%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Dining Flexibility</span><div class="bar-track"><div class="bar-fill" style="width:78%;background:#2E5A8F">202</div></div><span class="bar-n">62%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Room Comfort</span><div class="bar-track"><div class="bar-fill" style="width:76%;background:#2E6A8F">197</div></div><span class="bar-n">61%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Nearby Conveniences</span><div class="bar-track"><div class="bar-fill" style="width:72%;background:#2E7D9B">188</div></div><span class="bar-n">58%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Quiet &amp; Relaxing</span><div class="bar-track"><div class="bar-fill" style="width:62%;background:#3A8A8A">161</div></div><span class="bar-n">50%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Environmental Cond.</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#4A8A7A">156</div></div><span class="bar-n">48%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Effortless Access</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:#5A8A7A">142</div></div><span class="bar-n">44%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Safety &amp; Support</span><div class="bar-track"><div class="bar-fill" style="width:52%;background:#6A8A7A">134</div></div><span class="bar-n">41%</span></div>
+    </div>
+
+    <div class="sec2">Planned Travel Months</div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-lbl">May 2026 🔝</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1E3A5F">109</div></div><span class="bar-n">34%</span></div>
+      <div class="bar-row"><span class="bar-lbl">April 2026</span><div class="bar-track"><div class="bar-fill" style="width:87%;background:#2E7D9B">95</div></div><span class="bar-n">29%</span></div>
+      <div class="bar-row"><span class="bar-lbl">June 2026</span><div class="bar-track"><div class="bar-fill" style="width:38%;background:#3A8A7A">41</div></div><span class="bar-n">13%</span></div>
+      <div class="bar-row"><span class="bar-lbl">July 2026</span><div class="bar-track"><div class="bar-fill" style="width:17%;background:#5A7A7A">19</div></div><span class="bar-n">6%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Nov / Aug / Oct / Dec</span><div class="bar-track"><div class="bar-fill" style="width:10%;background:#7A7A7A">8–11</div></div><span class="bar-n">3–4%</span></div>
+    </div>
+    <div class="callout cb"><strong>May overtakes April</strong> as the top planned travel month (109 vs 95). Apr–May together = 63% of near-term demand. Jun–Jul are building steadily. Recommend increasing conversion focus on May 2026 travellers.</div>
+
+    <div class="sec2">Accommodation Star Ratings</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Stars</th><th>Count (hotel slots)</th><th>Share</th><th>vs Prior Week</th></tr></thead>
+        <tbody>
+          <tr><td>5 Stars</td><td>696</td><td>81.8%</td><td class="up">↑ 1.6pp</td></tr>
+          <tr><td>4 Stars</td><td>136</td><td>16.0%</td><td class="up">↑ 1.7pp</td></tr>
+          <tr><td>4.5 Stars</td><td>19</td><td>2.2%</td><td class="dn">↓ 3.3pp</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════ DESTINATIONS ══════ -->
+  <div id="s3" class="panel">
+    <div class="sec">&#9632; Destination Analysis</div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-lbl">Bali, Indonesia</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1E3A5F">64</div></div><span class="bar-n">19.8%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Bangkok 🔝↑</span><div class="bar-track"><div class="bar-fill" style="width:69%;background:#2E5A9F">44</div></div><span class="bar-n">13.6%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Singapore ↑</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:#2E6A8F">35</div></div><span class="bar-n">10.8%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Ho Chi Minh ↑</span><div class="bar-track"><div class="bar-fill" style="width:53%;background:#2E7A9B">34</div></div><span class="bar-n">10.5%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Seoul, S. Korea</span><div class="bar-track"><div class="bar-fill" style="width:47%;background:#3A8A9A">30</div></div><span class="bar-n">9.3%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Kuala Lumpur</span><div class="bar-track"><div class="bar-fill" style="width:42%;background:#4A8A8A">27</div></div><span class="bar-n">8.3%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Tokyo, Japan</span><div class="bar-track"><div class="bar-fill" style="width:38%;background:#5A8A7A">24</div></div><span class="bar-n">7.4%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Phuket, Thailand ↑</span><div class="bar-track"><div class="bar-fill" style="width:34%;background:#6A8A6A">22</div></div><span class="bar-n">6.8%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Melbourne ↑↑</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:#7A7A7A">16</div></div><span class="bar-n">4.9%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Mumbai, India</span><div class="bar-track"><div class="bar-fill" style="width:19%;background:#8A7A7A">12</div></div><span class="bar-n">3.7%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Jakarta, Indonesia</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:#9A7A8A">8</div></div><span class="bar-n">2.5%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Siem Reap / Sydney</span><div class="bar-track"><div class="bar-fill" style="width:6%;background:#AA8A8A">4/3</div></div><span class="bar-n">2.2%</span></div>
+    </div>
+
+    <div class="tw" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Destination</th><th>Count</th><th>Share</th><th>vs Prior</th></tr></thead>
+        <tbody>
+          <tr><td>Bali, Indonesia</td><td>64</td><td>19.8%</td><td class="neu">→ stable</td></tr>
+          <tr><td>Bangkok, Thailand</td><td>44</td><td>13.6%</td><td class="up">↑ 159%</td></tr>
+          <tr><td>Singapore</td><td>35</td><td>10.8%</td><td class="up">↑ 106%</td></tr>
+          <tr><td>Ho Chi Minh, Vietnam</td><td>34</td><td>10.5%</td><td class="up">↑ 127%</td></tr>
+          <tr><td>Seoul, South Korea</td><td>30</td><td>9.3%</td><td class="up">↑ 58%</td></tr>
+          <tr><td>Kuala Lumpur, Malaysia</td><td>27</td><td>8.3%</td><td class="dn">↓ slight</td></tr>
+          <tr><td>Tokyo, Japan</td><td>24</td><td>7.4%</td><td class="dn">↓ slight</td></tr>
+          <tr><td>Phuket, Thailand</td><td>22</td><td>6.8%</td><td class="up">↑ 83%</td></tr>
+          <tr><td>Melbourne, Australia</td><td>16</td><td>4.9%</td><td class="up">↑ 167%</td></tr>
+          <tr><td>Mumbai, India</td><td>12</td><td>3.7%</td><td class="neu">→ stable</td></tr>
+          <tr><td>Jakarta, Indonesia</td><td>8</td><td>2.5%</td><td class="dn">↓ 27%</td></tr>
+          <tr><td>Siem Reap, Cambodia</td><td>4</td><td>1.2%</td><td class="neu">→ stable</td></tr>
+          <tr><td>Sydney, Australia</td><td>3</td><td>0.9%</td><td class="dn">↓ 75%</td></tr>
+          <tr><td>New Delhi, India</td><td>1</td><td>0.3%</td><td class="neu">New entry</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout cb"><strong>Portfolio insight:</strong> Bali's share continues to compress slowly — healthy. Bangkok's resurgence likely tied to school holiday season across South &amp; SE Asia. Melbourne's jump to 16 (from 6) is notable — may warrant a closer look at whether this is organic or campaign driven. New Delhi makes its first appearance.</div>
+  </div>
+
+  <!-- ══════ USERS ══════ -->
+  <div id="s4" class="panel">
+    <div class="sec">&#9632; User Geography</div>
+    <div class="kgrid">
+      <div class="kcard"><div class="kv">34</div><div class="kl">Countries</div><div class="kc up">↑ 3 from prior</div></div>
+      <div class="kcard"><div class="kv">62%</div><div class="kl">India Share</div><div class="kc dn">↑ 8pp (back up)</div></div>
+      <div class="kcard"><div class="kv">82</div><div class="kl">Registered</div><div class="kc up">25% rate</div></div>
+      <div class="kcard"><div class="kv">242</div><div class="kl">Anonymous</div><div class="kc neu">75% share</div></div>
+    </div>
+
+    <div class="sec2">Top Source Countries</div>
+    <div class="bars">
+      <div class="bar-row"><span class="bar-lbl">India 🇮🇳</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1E3A5F">202</div></div><span class="bar-n">62%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Indonesia 🇮🇩</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:#2E7D9B">26</div></div><span class="bar-n">8%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Malaysia 🇲🇾</span><div class="bar-track"><div class="bar-fill" style="width:10%;background:#3A8A7A">20</div></div><span class="bar-n">6%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Philippines 🇵🇭</span><div class="bar-track"><div class="bar-fill" style="width:6%;background:#5A7A9A">12</div></div><span class="bar-n">4%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Thailand 🇹🇭</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:#7A7A7A">8</div></div><span class="bar-n">2%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Vietnam 🇻🇳</span><div class="bar-track"><div class="bar-fill" style="width:2.5%;background:#8A7A7A">5</div></div><span class="bar-n">2%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Canada, Pakistan, Japan</span><div class="bar-track"><div class="bar-fill" style="width:1.5%;background:#9A9A9A">3</div></div><span class="bar-n">1%</span></div>
+      <div class="bar-row"><span class="bar-lbl">Others (25 countries)</span><div class="bar-track"><div class="bar-fill" style="width:8%;background:#AAAAAA">~24</div></div><span class="bar-n">7%</span></div>
+    </div>
+
+    <div class="callout cg"><span class="ct">✅ Registration Rate Holding</span>Registration at 25% (82 signed-in users vs 242 anonymous) — steady after 3 consecutive weeks of gains. With higher total volume this week, the absolute count of registered users (82) is the highest yet.</div>
+    <div class="callout ca"><span class="ct">⚠ India share rebounds</span>India back to 62% (from 54% last week) — partly volume-driven since total itineraries are up 49%. Indonesia and Malaysia hold steady in absolute terms but their relative share dipped slightly. 34 countries represented — broadest week yet.</div>
+    <div class="callout cb"><span class="ct">📊 New geographies this week</span>Greece, Croatia, Egypt, Belgium, Qatar, Saudi Arabia, UAE, Pakistan, Canada, and other new-to-platform countries detected. Organic international discovery is gradually widening.</div>
+  </div>
+
+  <!-- ══════ TECH ══════ -->
+  <div id="s5" class="panel">
+    <div class="sec">&#9632; Tech Project Status <span class="pill">Week of Apr 13–19, 2026</span></div>
+    <div class="kgrid">
+      <div class="kcard"><div class="kv" style="color:var(--green-mid)">137</div><div class="kl">Completed</div><div class="kc up">↑ 3 this week</div></div>
+      <div class="kcard"><div class="kv" style="color:var(--amber-mid)">11</div><div class="kl">In Progress</div><div class="kc up">↓ 2 from prior</div></div>
+      <div class="kcard"><div class="kv" style="color:var(--accent)">4+1</div><div class="kl">Prod / Staging</div><div class="kc neu">stable</div></div>
+      <div class="kcard"><div class="kv" style="color:var(--red-mid)">3</div><div class="kl">On Hold</div><div class="kc dn">↑ 1 (Klook)</div></div>
+    </div>
+
+    <div class="callout cg"><span class="ct">✅ Delivered This Week</span>
+      <strong>Signup Confirmation</strong> → Production &nbsp;·&nbsp;
+      <strong>Post-edit URL change for itinerary</strong> → Staging &nbsp;·&nbsp;
+      <strong>Voice Concierge</strong> — sub-preference implementation in progress (17/04 note: implementation ongoing) &nbsp;·&nbsp;
+      <strong>BUG_065</strong> (itinerary not resuming after popup) resolved and closed
+    </div>
+    <div class="callout ca"><span class="ct">🔄 Klook moved to Hold</span>No API access available from Klook. Applied and awaiting. Moved to Hold to reflect current reality — explore widget integration options as fallback.</div>
+
+    <div class="sec2">In-Progress Items (11)</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Build</th><th>Item</th><th>Deadline</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>greytt.ai</td><td>Voice Integration — Voice Concierge</td><td>Apr 15 <span class="badge br">OVERDUE</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Greytt Score Automation / Digital Audit</td><td>Apr 15 <span class="badge br">OVERDUE</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Integrate with SuperGryd (GTB)</td><td>Apr 15 <span class="badge br">OVERDUE</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Database Setup — Google Images (permanent fix)</td><td>Apr 15 <span class="badge br">OVERDUE</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Cross-Channel Personalisation Testing</td><td>Apr 15 <span class="badge br">OVERDUE</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Greytt Hotel Finder Tool</td><td>Apr 22 <span class="badge ba">DUE SOON</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Enhancement of Chat (v2.0)</td><td>Apr 22 <span class="badge ba">DUE SOON</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>B2B API Access V1 (GTB Q2)</td><td>Apr 22 <span class="badge ba">DUE SOON</span></td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Test Cases for Sanity Testing</td><td>TBD</td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Defect Triage</td><td>TBD</td><td><span class="badge ba">In Progress</span></td></tr>
+          <tr><td>greytt.ai</td><td>Error Logging Notification</td><td>TBD</td><td><span class="badge ba">In Progress</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout cr"><strong>🔴 5 Items Past Deadline (Apr 15):</strong> Voice Concierge · Score Automation · SuperGryd · DB Images fix · Cross-Channel Personalisation. All require owner escalation or revised ETAs at next sync. B2B API has been assigned Apr 22 but has no dev activity logged yet.</div>
+
+    <div class="sec2">Moved to Production / Staging This Week</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Item</th><th>Platform</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Signup Confirmation</td><td>greytt.ai</td><td><span class="badge bg">Production</span></td></tr>
+          <tr><td>Thumbnails for all URLs when shared</td><td>greytt.ai</td><td><span class="badge bg">Production</span></td></tr>
+          <tr><td>Pop Quiz Implementation</td><td>greytt.ai</td><td><span class="badge bg">Production</span></td></tr>
+          <tr><td>Google Image API Fix</td><td>greytt.ai</td><td><span class="badge bg">Production</span></td></tr>
+          <tr><td>Post-edit URL Change for Itinerary</td><td>Journeys</td><td><span class="badge bb">Staging</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec2">On Hold (3)</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Item</th><th>Platform</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Add Klook for Experiences</td><td>greytt.ai</td><td>No API access from Klook yet — exploring widget integration</td></tr>
+          <tr><td>Guided Onboarding Flow</td><td>Journeys</td><td>Pending Hotel Finder completion</td></tr>
+          <tr><td>Being Sattvaa — Refresh &amp; Renew</td><td>greytt.ai</td><td>Business decision — booking engine needs rescoping</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec2">Q2 Pipeline — Not Started</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Item</th><th>Priority</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Marketplace (Products &amp; Experiences)</td><td><span class="badge br">High</span></td><td>No owner or deadline assigned</td></tr>
+          <tr><td>On-Platform Booking Engine</td><td><span class="badge ba">Moderate</span></td><td>No owner or deadline assigned</td></tr>
+          <tr><td>Greytt Score New Scoring Workflow Testing</td><td>—</td><td>New addition to tracker this week</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout ca">Marketplace and Booking Engine remain unowned and unscheduled — strategic revenue-enabling items that need scoping and assignment this sprint.</div>
+
+    <div class="sec2">Action Items for This Week</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Action</th><th>Owner</th><th>Due</th></tr></thead>
+        <tbody>
+          <tr><td>Provide revised ETAs for 5 overdue Apr 15 items</td><td>Ragul / Gova</td><td><span class="badge br">ASAP</span></td></tr>
+          <tr><td>Finalise Hotel Finder — backend check &amp; demo</td><td>Gova / Rithick / Vishnu</td><td>Apr 22</td></tr>
+          <tr><td>Chat v2.0 planning &amp; first deliverable</td><td>Rithick / Bharath / Madhavan</td><td>Apr 22</td></tr>
+          <tr><td>Assign owner + deadline to B2B API V1</td><td>Ragul / Gova</td><td>ASAP</td></tr>
+          <tr><td>Smoke-test Post-edit URL change in staging</td><td>Team / QA</td><td>This week</td></tr>
+          <tr><td>Update Cross-Channel Personalisation reports</td><td>Govarthan</td><td>ASAP</td></tr>
+          <tr><td>Fix BUG_069 (hotel loading 30–40s lag)</td><td>Rithick / Bharath</td><td>Next sprint</td></tr>
+          <tr><td>Scope Marketplace &amp; Booking Engine — assign owners</td><td>Ragul</td><td>This week</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════ BUGS ══════ -->
+  <div id="s6" class="panel">
+    <div class="sec">&#9632; Bug Queue Status</div>
+    <div class="kgrid">
+      <div class="kcard"><div class="kv">70</div><div class="kl">Total Logged</div><div class="kc up">↑ 1 new</div></div>
+      <div class="kcard"><div class="kv" style="color:var(--red-mid)">5</div><div class="kl">Open</div><div class="kc up">↓ 1 resolved</div></div>
+      <div class="kcard"><div class="kv" style="color:var(--green-mid)">62</div><div class="kl">Resolved</div><div class="kc up">89%</div></div>
+      <div class="kcard"><div class="kv" style="color:var(--amber-mid)">2</div><div class="kl">Blocked</div><div class="kc neu">Monitoring</div></div>
+    </div>
+
+    <div class="callout cg"><span class="ct">✅ Resolved This Week</span><strong>BUG_065</strong> — Itinerary not auto-generating after popup dismissed. This was the critical user-flow bug flagged last two weeks. Now closed.</div>
+
+    <div class="sec2">5 Remaining Open Bugs</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Bug ID</th><th>Module</th><th>Issue</th><th>Priority</th><th>Severity</th></tr></thead>
+        <tbody>
+          <tr><td>BUG_038</td><td>Greytt Score</td><td>Some places not showing Greytt Score during generation</td><td><span class="badge ba">Medium</span></td><td><span class="badge bgy">Minor</span></td></tr>
+          <tr><td>BUG_060</td><td>Hotels</td><td>Traveler change not affecting hotel recommendations</td><td><span class="badge ba">Medium</span></td><td><span class="badge br">Major</span></td></tr>
+          <tr><td>BUG_066</td><td>Chatbot UI</td><td>Popup UI alignment broken in chatbot</td><td><span class="badge bgy">Low</span></td><td><span class="badge bgy">Minor</span></td></tr>
+          <tr><td>BUG_067</td><td>AI Output</td><td>Irrelevant commentary in itinerary descriptions</td><td><span class="badge ba">Medium</span></td><td><span class="badge bgy">Minor</span></td></tr>
+          <tr><td>BUG_069</td><td>Hotel Listing</td><td>Show more hotels — 30–40s load glitch after popup</td><td><span class="badge br">High</span></td><td><span class="badge bgy">Minor</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec2">2 Blocked Bugs</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Bug ID</th><th>Issue</th><th>Block Reason</th></tr></thead>
+        <tbody>
+          <tr><td>BUG_025</td><td>Hotels not generated for trips &gt;30 days</td><td>Awaiting product decision on max trip duration</td></tr>
+          <tr><td>BUG_026</td><td>Maximum trip duration not restricted</td><td>Linked to BUG_025 — same root cause</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout cr"><span class="ct">Priority Fixes This Sprint</span>
+      <strong>BUG_069 (High)</strong> — Hotel listing load lag is a visible UX failure. Third consecutive week unresolved.<br>
+      <strong>BUG_060 (Medium/Major)</strong> — Traveler count not updating hotels impacts paid experience.<br>
+      <strong>BUG_067 (Medium)</strong> — AI commentary quality flag — should be addressed as part of prompt optimisation work.
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<footer>Greytt Technology &nbsp;·&nbsp; Internal Analytics &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; Week ending April 19, 2026 &nbsp;·&nbsp; Generated April 20, 2026</footer>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(t => t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if (el && el.classList) el.classList.add('on');
+}
+</script>
+</body>
+</html>
