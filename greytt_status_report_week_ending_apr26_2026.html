@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greytt Status Report - Week Ending April 26, 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 12px;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header .period {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            color: #5a6c7d;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            box-shadow: 0 2px 6px rgba(30, 60, 114, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #6b7c93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8ecf1;
+        }
+
+        .chart-container {
+            margin: 16px 0;
+        }
+
+        .bar-chart {
+            margin: 12px 0;
+        }
+
+        .bar-row {
+            margin-bottom: 12px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .bar-label-text {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .bar-label-value {
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        .bar-background {
+            background: #e8ecf1;
+            height: 28px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 14px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f3f7;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #5a6c7d;
+            font-size: 14px;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #1e3c72;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-not-started {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-hold {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .insight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1e3c72;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+        }
+
+        .insight-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .insight-text {
+            color: #5a6c7d;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        @media (max-width: 480px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .kpi-value {
+                font-size: 24px;
+            }
+        }
+
+        .country-badge {
+            display: inline-block;
+            background: #e8ecf1;
+            color: #2c3e50;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: #6b7c93;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Greytt Status Report</h1>
+            <div class="period">Week Ending April 26, 2026</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('overview')">Overview</div>
+            <div class="tab" onclick="switchTab('itineraries')">Itineraries</div>
+            <div class="tab" onclick="switchTab('tech')">Tech Projects</div>
+            <div class="tab" onclick="switchTab('seo')">SEO & Traffic</div>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">414</div>
+                    <div class="kpi-label">Itineraries</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">14</div>
+                    <div class="kpi-label">Destinations</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">79%</div>
+                    <div class="kpi-label">Plan Method</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">142</div>
+                    <div class="kpi-label">Completed Projects</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Week Highlights</div>
+                <div class="insight-box">
+                    <div class="insight-title">🎯 Strong User Engagement</div>
+                    <div class="insight-text">
+                        Generated 414 itineraries across 14 destinations with India representing 63% of user base. 
+                        Bali continues as top destination (88 itineraries, 21% of total).
+                    </div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">🔧 Tech Progress Steady</div>
+                    <div class="insight-text">
+                        142 projects completed to date with 11 currently in progress. 
+                        21 projects queued for initiation, 3 on hold pending dependencies.
+                    </div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">📊 SEO Coverage Building</div>
+                    <div class="insight-text">
+                        45 pages indexed in search engines. Latest search impressions: 40 with average position 9.3. 
+                        CTR improvement opportunity identified.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Quick Stats</div>
+                <div class="metric-row">
+                    <div class="metric-label">User Countries</div>
+                    <div class="metric-value">37 countries</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Quiz Escapes</div>
+                    <div class="metric-value">36</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Itinerary Revisions</div>
+                    <div class="metric-value">16</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Avg Edits per Itinerary</div>
+                    <div class="metric-value">0.03</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="itineraries" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">414</div>
+                    <div class="kpi-label">Total Generated</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">328</div>
+                    <div class="kpi-label">Plan Method</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">86</div>
+                    <div class="kpi-label">Chat Method</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">6</div>
+                    <div class="kpi-label">Edited</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Top Destinations</div>
+                <div class="chart-container">
+                    <div class="bar-chart" id="destinations-chart"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Experience Types</div>
+                <div class="chart-container">
+                    <div class="bar-chart" id="experiences-chart"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Top User Countries</div>
+                <div class="chart-container">
+                    <div class="bar-chart" id="countries-chart"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">User Engagement</div>
+                <div class="metric-row">
+                    <div class="metric-label">Quiz Escapes</div>
+                    <div class="metric-value">36 users</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Total Revisions Made</div>
+                    <div class="metric-value">16</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Itineraries with Edits</div>
+                    <div class="metric-value">6 (1.4%)</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Average Edits per Itinerary</div>
+                    <div class="metric-value">0.03</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tech" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">142</div>
+                    <div class="kpi-label">Completed</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">11</div>
+                    <div class="kpi-label">In Progress</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">21</div>
+                    <div class="kpi-label">Not Started</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">3</div>
+                    <div class="kpi-label">On Hold</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Project Status Breakdown</div>
+                <div class="chart-container">
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <div class="bar-label">
+                                <span class="bar-label-text">Completed</span>
+                                <span class="bar-label-value">142</span>
+                            </div>
+                            <div class="bar-background">
+                                <div class="bar-fill" style="width: 0%" data-width="80%"></div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">
+                                <span class="bar-label-text">Not Started</span>
+                                <span class="bar-label-value">21</span>
+                            </div>
+                            <div class="bar-background">
+                                <div class="bar-fill" style="width: 0%; background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%)" data-width="12%"></div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">
+                                <span class="bar-label-text">In Progress</span>
+                                <span class="bar-label-value">11</span>
+                            </div>
+                            <div class="bar-background">
+                                <div class="bar-fill" style="width: 0%; background: linear-gradient(90deg, #f39c12 0%, #d68910 100%)" data-width="6%"></div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <div class="bar-label">
+                                <span class="bar-label-text">On Hold</span>
+                                <span class="bar-label-value">3</span>
+                            </div>
+                            <div class="bar-background">
+                                <div class="bar-fill" style="width: 0%; background: linear-gradient(90deg, #95a5a6 0%, #7f8c8d 100%)" data-width="2%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">This Week's Activity</div>
+                <div class="insight-box">
+                    <div class="insight-title">📅 Projects Completed</div>
+                    <div class="insight-text">
+                        No projects were completed during the week of April 20-26, 2026. 
+                        11 projects remain in active development.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Status Summary</div>
+                <div class="metric-row">
+                    <div class="metric-label">Completed Projects</div>
+                    <div class="metric-value"><span class="status-badge status-completed">142</span></div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">In Progress</div>
+                    <div class="metric-value"><span class="status-badge status-progress">11</span></div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Not Started</div>
+                    <div class="metric-value"><span class="status-badge status-not-started">21</span></div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">On Hold</div>
+                    <div class="metric-value"><span class="status-badge status-hold">3</span></div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Completion Rate</div>
+                    <div class="metric-value">80%</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="seo" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">45</div>
+                    <div class="kpi-label">Pages Indexed</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">32</div>
+                    <div class="kpi-label">Not Indexed</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">40</div>
+                    <div class="kpi-label">Impressions</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">9.3</div>
+                    <div class="kpi-label">Avg Position</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Search Coverage</div>
+                <div class="metric-row">
+                    <div class="metric-label">Indexed Pages</div>
+                    <div class="metric-value">45</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Not Indexed Pages</div>
+                    <div class="metric-value">32</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Total Coverage</div>
+                    <div class="metric-value">77 pages</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Index Rate</div>
+                    <div class="metric-value">58%</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Latest Impressions</div>
+                    <div class="metric-value">43</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Search Performance</div>
+                <div class="metric-row">
+                    <div class="metric-label">Clicks</div>
+                    <div class="metric-value">0</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Impressions</div>
+                    <div class="metric-value">40</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Click-Through Rate</div>
+                    <div class="metric-value">0.0%</div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-label">Average Position</div>
+                    <div class="metric-value">9.3</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Key Insights</div>
+                <div class="insight-box">
+                    <div class="insight-title">⚠️ CTR Optimization Needed</div>
+                    <div class="insight-text">
+                        Zero clicks despite 40 impressions indicates a need for title/meta description optimization. 
+                        Average position of 9.3 suggests visibility at bottom of page 1.
+                    </div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">📈 Indexing Progress</div>
+                    <div class="insight-text">
+                        58% of submitted pages are indexed. Focus on improving crawl budget and 
+                        addressing technical SEO issues for the remaining 32 pages.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Generated on April 27, 2026 • Greytt Journeys Business Intelligence
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+
+            setTimeout(() => {
+                animateBars();
+            }, 100);
+        }
+
+        function createBarChart(containerId, data, maxValue) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            const sortedData = Object.entries(data)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+
+            sortedData.forEach(([label, value]) => {
+                const percentage = (value / maxValue) * 100;
+                const barRow = document.createElement('div');
+                barRow.className = 'bar-row';
+                barRow.innerHTML = `
+                    <div class="bar-label">
+                        <span class="bar-label-text">${label}</span>
+                        <span class="bar-label-value">${value}</span>
+                    </div>
+                    <div class="bar-background">
+                        <div class="bar-fill" style="width: 0%" data-width="${percentage}%"></div>
+                    </div>
+                `;
+                container.appendChild(barRow);
+            });
+        }
+
+        function animateBars() {
+            requestAnimationFrame(() => {
+                const bars = document.querySelectorAll('.bar-fill');
+                bars.forEach(bar => {
+                    bar.style.width = '0';
+                });
+
+                setTimeout(() => {
+                    bars.forEach(bar => {
+                        const targetWidth = bar.getAttribute('data-width');
+                        bar.style.width = targetWidth;
+                    });
+                }, 50);
+            });
+        }
+
+        const destinationsData = {
+            "Bali, Indonesia": 88,
+            "Tokyo, Japan": 47,
+            "Bangkok, Thailand": 46,
+            "Singapore, Singapore": 45,
+            "Ho Chi Minh, Vietnam": 42,
+            "Seoul, South Korea": 40,
+            "Kuala Lumpur, Malaysia": 38,
+            "Phuket, Thailand": 28
+        };
+
+        const experiencesData = {
+            "Top Attractions": 135,
+            "Relaxed & Chill": 96,
+            "Adventure & Sport": 62,
+            "Natural Wonders": 35,
+            "Foodie Explorations": 27,
+            "Shopping Fantasy": 18,
+            "Culture & History": 17,
+            "Off the Beaten Path": 10
+        };
+
+        const countriesData = {
+            "India": 262,
+            "Philippines": 33,
+            "Indonesia": 26,
+            "Malaysia": 24,
+            "Saudi Arabia": 8,
+            "Thailand": 7,
+            "South Africa": 5,
+            "Pakistan": 5
+        };
+
+        createBarChart('destinations-chart', destinationsData, 88);
+        createBarChart('experiences-chart', experiencesData, 135);
+        createBarChart('countries-chart', countriesData, 262);
+
+        setTimeout(animateBars, 300);
+    </script>
+</body>
+</html>
