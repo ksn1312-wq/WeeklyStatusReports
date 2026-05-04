@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greytt Status Report - Week Ending May 1, 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 12px;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header .period {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            color: #5a6c7d;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            box-shadow: 0 2px 6px rgba(30, 60, 114, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .kpi-change {
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-change.positive {
+            color: #27ae60;
+        }
+
+        .kpi-change.negative {
+            color: #e74c3c;
+        }
+
+        .kpi-change.neutral {
+            color: #95a5a6;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            font-size: 14px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .breakdown-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.5s ease;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-completed {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-progress {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+
+        .status-not-started {
+            background: #f8d7da;
+            color: #c0392b;
+        }
+
+        .status-hold {
+            background: #e2e3e5;
+            color: #6c757d;
+        }
+
+        .priority-critical {
+            background: #fee;
+            color: #c0392b;
+        }
+
+        .priority-high {
+            background: #fff3cd;
+            color: #e67e22;
+        }
+
+        .priority-moderate {
+            background: #d1ecf1;
+            color: #3498db;
+        }
+
+        .priority-low {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .kpi-value {
+                font-size: 24px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
+            }
+
+            .chart-container {
+                padding: 16px;
+            }
+
+            .tab {
+                min-width: 100px;
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Greytt Weekly Status Report</h1>
+            <div class="period">Week Ending: May 1, 2026 | Reporting Period: Apr 27 - May 1, 2026</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('overview')">Overview</div>
+            <div class="tab" onclick="showTab('itineraries')">Itineraries</div>
+            <div class="tab" onclick="showTab('search')">Search & SEO</div>
+            <div class="tab" onclick="showTab('tech')">Tech Projects</div>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Itineraries</div>
+                    <div class="kpi-value">254</div>
+                    <div class="kpi-change positive">
+                        ↑ +254 vs prev week
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Unique Users</div>
+                    <div class="kpi-value">35</div>
+                    <div class="kpi-change positive">
+                        ↑ +35 vs prev week
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Search Clicks</div>
+                    <div class="kpi-value">18</div>
+                    <div class="kpi-change negative">
+                        ↓ -2 vs prev week
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg CTR</div>
+                    <div class="kpi-value">5.93%</div>
+                    <div class="kpi-change positive">
+                        ↑ +2.52% vs prev week
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Indexed Pages</div>
+                    <div class="kpi-value">61</div>
+                    <div class="kpi-change neutral">
+                        Coverage tracking
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg Edits</div>
+                    <div class="kpi-value">0.06</div>
+                    <div class="kpi-change positive">
+                        ↑ +0.06 vs prev week
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Week Highlights:</strong> Strong itinerary generation activity with 254 new itineraries created. Search CTR improved significantly (+2.52pp) despite lower click volume. Tech projects show 145 completed tasks.
+            </div>
+        </div>
+
+        <div id="itineraries" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Itineraries</div>
+                    <div class="kpi-value">254</div>
+                    <div class="kpi-change positive">+254 from prev week</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Unique Users</div>
+                    <div class="kpi-value">35</div>
+                    <div class="kpi-change positive">+35 from prev week</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg Edits/Itinerary</div>
+                    <div class="kpi-value">0.06</div>
+                    <div class="kpi-change positive">+0.06 from prev week</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Plan Method</div>
+                    <div class="kpi-value">216</div>
+                    <div class="kpi-change neutral">85.0% of total</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Top Destinations (This Week)</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Bali, Indonesia</div>
+                    <div class="breakdown-value">66</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 100%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Tokyo, Japan</div>
+                    <div class="breakdown-value">39</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 59%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Bangkok, Thailand</div>
+                    <div class="breakdown-value">39</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 59%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Ho Chi Minh, Vietnam</div>
+                    <div class="breakdown-value">23</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 35%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Singapore, Singapore</div>
+                    <div class="breakdown-value">19</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 29%;"></div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Generation Methods</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Plan</div>
+                    <div class="breakdown-value">216 (85.0%)</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Chat</div>
+                    <div class="breakdown-value">38 (15.0%)</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Top User Countries</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">India (IN)</div>
+                    <div class="breakdown-value">161</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 100%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Indonesia (ID)</div>
+                    <div class="breakdown-value">22</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 14%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Malaysia (MY)</div>
+                    <div class="breakdown-value">16</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 10%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Philippines (PH)</div>
+                    <div class="breakdown-value">8</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 5%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">UAE (AE)</div>
+                    <div class="breakdown-value">8</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 5%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="search" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Clicks</div>
+                    <div class="kpi-value">18</div>
+                    <div class="kpi-change negative">↓ -2 (-10.0%)</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Impressions</div>
+                    <div class="kpi-value">308</div>
+                    <div class="kpi-change negative">↓ -192 (-38.4%)</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg CTR</div>
+                    <div class="kpi-value">5.93%</div>
+                    <div class="kpi-change positive">↑ +2.52pp (+73.9%)</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg Position</div>
+                    <div class="kpi-value">9.08</div>
+                    <div class="kpi-change negative">↓ -2.15 positions</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Search Performance Summary</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Current Week Clicks</div>
+                    <div class="breakdown-value">18</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Previous Week Clicks</div>
+                    <div class="breakdown-value">20</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Current Week Impressions</div>
+                    <div class="breakdown-value">308</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Previous Week Impressions</div>
+                    <div class="breakdown-value">500</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Index Coverage</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Indexed Pages</div>
+                    <div class="breakdown-value">61</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 64%;"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Not Indexed</div>
+                    <div class="breakdown-value">35</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 36%; background: linear-gradient(90deg, #e74c3c, #c0392b);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Total Pages</div>
+                    <div class="breakdown-value">96</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Search Insights:</strong> CTR improved significantly (+73.9%) despite lower impression volume, suggesting better ranking quality and relevance. Average position declined by 2.15 positions to 9.08. Coverage shows 63.5% indexed.
+            </div>
+        </div>
+
+        <div id="tech" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Completed</div>
+                    <div class="kpi-value">145</div>
+                    <div class="kpi-change neutral">79.2% of total</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">In Progress</div>
+                    <div class="kpi-value">13</div>
+                    <div class="kpi-change neutral">7.1% of total</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Not Started</div>
+                    <div class="kpi-value">22</div>
+                    <div class="kpi-change neutral">12.0% of total</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">On Hold</div>
+                    <div class="kpi-value">3</div>
+                    <div class="kpi-change neutral">1.6% of total</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Project Status Breakdown</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge status-completed">Completed</span>
+                    </div>
+                    <div class="breakdown-value">145</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #27ae60, #229954);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge status-not-started">Not Started</span>
+                    </div>
+                    <div class="breakdown-value">22</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 15%; background: linear-gradient(90deg, #c0392b, #a93226);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge status-progress">In Progress</span>
+                    </div>
+                    <div class="breakdown-value">13</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 9%; background: linear-gradient(90deg, #f39c12, #d68910);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge status-hold">Hold</span>
+                    </div>
+                    <div class="breakdown-value">3</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 2%; background: linear-gradient(90deg, #95a5a6, #7f8c8d);"></div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Priority Distribution</div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge priority-high">High</span>
+                    </div>
+                    <div class="breakdown-value">83</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #e67e22, #d35400);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge priority-moderate">Moderate</span>
+                    </div>
+                    <div class="breakdown-value">66</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 80%; background: linear-gradient(90deg, #3498db, #2980b9);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge priority-critical">Critical</span>
+                    </div>
+                    <div class="breakdown-value">9</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 11%; background: linear-gradient(90deg, #c0392b, #a93226);"></div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">
+                        <span class="status-badge priority-low">Low</span>
+                    </div>
+                    <div class="breakdown-value">5</div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 6%; background: linear-gradient(90deg, #27ae60, #229954);"></div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Tech Project Insights:</strong> Strong completion rate at 79.2% with 145 completed tasks. 13 projects currently in progress. High and moderate priority items represent 91.4% of the workload.
+            </div>
+        </div>
+
+        <div class="footer">
+            Generated on May 4, 2026 | Greytt.ai Analytics Dashboard
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
