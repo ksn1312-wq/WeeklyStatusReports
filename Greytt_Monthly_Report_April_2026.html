@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greytt · April 2026 Monthly Report</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1a14;
+    --paper: #f5f2ec;
+    --green-deep: #1a3d2b;
+    --green-mid: #2d6a4f;
+    --green-light: #74c69d;
+    --amber: #e8a020;
+    --amber-light: #fde68a;
+    --red: #c0392b;
+    --red-light: #fde8e6;
+    --blue: #1a6b9a;
+    --surface: #ffffff;
+    --surface-2: #f0ede6;
+    --border: #d4ccbb;
+    --text-muted: #6b7a6e;
+    --tag-h: #1a3d2b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  .top-bar {
+    background: var(--green-deep);
+    color: white;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 52px;
+  }
+  .top-bar .brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+  .top-bar .period {
+    font-size: 0.72rem;
+    color: var(--green-light);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── TAB NAV ── */
+  .tab-bar {
+    background: var(--green-deep);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 2px solid var(--green-mid);
+    padding: 0 8px;
+    gap: 2px;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.55);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--green-deep);
+    background-image:
+      radial-gradient(ellipse at 80% 20%, rgba(116,198,157,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(232,160,32,0.08) 0%, transparent 50%);
+    color: white;
+    padding: 28px 16px 32px;
+  }
+  .hero-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 6px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+  .hero-sub {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 24px;
+  }
+
+  /* ── KPI ROW ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .kpi-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+  }
+  .kpi-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: white;
+  }
+  .kpi-num sup {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    vertical-align: super;
+    color: var(--amber);
+  }
+  .kpi-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.55);
+    margin-top: 4px;
+  }
+  .kpi-delta {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  .kpi-delta.up { color: var(--green-light); }
+  .kpi-delta.down { color: #fc8c75; }
+  .kpi-delta.neutral { color: rgba(255,255,255,0.4); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 20px 16px; display: none; }
+  .section.active { display: block; }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--green-deep);
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+  }
+  .card-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── WEEKLY TREND ── */
+  .week-trend {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .week-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .week-bar-wrap {
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+  }
+  .week-bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    background: var(--green-mid);
+    min-height: 4px;
+    transition: height 0.4s ease;
+  }
+  .week-bar.peak { background: var(--amber); }
+  .week-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .week-label {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--surface-2);
+    font-size: 0.87rem;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--text-muted); }
+  .stat-val { font-weight: 600; color: var(--ink); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .badge-up { background: #d1fae5; color: #065f46; }
+  .badge-down { background: #fee2e2; color: #991b1b; }
+  .badge-amber { background: var(--amber-light); color: #92400e; }
+  .badge-neutral { background: var(--surface-2); color: var(--text-muted); }
+
+  /* ── DEST BARS ── */
+  .dest-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+  }
+  .dest-name {
+    font-size: 0.82rem;
+    min-width: 110px;
+    max-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dest-track {
+    flex: 1;
+    background: var(--surface-2);
+    height: 22px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .dest-fill {
+    height: 100%;
+    background: var(--green-mid);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    transition: width 0.5s ease;
+  }
+  .dest-fill.amber { background: var(--amber); }
+  .dest-count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+  }
+
+  /* ── MONTH PILL ── */
+  .month-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .month-pill-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+  .month-pill-label { min-width: 72px; color: var(--text-muted); }
+  .month-pill-bar {
+    flex: 1;
+    height: 20px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .month-pill-fill {
+    height: 100%;
+    background: var(--green-light);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+  .month-pill-fill.top { background: var(--amber); }
+  .month-pill-pct {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--green-deep);
+  }
+  .month-pill-num { font-weight: 600; min-width: 36px; text-align: right; }
+
+  /* ── USER GEO ── */
+  .geo-list { display: flex; flex-direction: column; gap: 8px; }
+  .geo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+  }
+  .geo-flag { font-size: 1.2rem; width: 28px; text-align: center; }
+  .geo-country { flex: 1; }
+  .geo-bar-wrap { width: 90px; background: var(--surface-2); border-radius: 4px; height: 16px; overflow: hidden; }
+  .geo-bar { height: 100%; background: var(--green-mid); border-radius: 4px; }
+  .geo-bar.top { background: var(--amber); }
+  .geo-pct { font-weight: 700; min-width: 36px; text-align: right; font-size: 0.8rem; }
+
+  /* ── TECH ITEMS ── */
+  .tech-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--surface-2);
+    font-size: 0.85rem;
+  }
+  .tech-item:last-child { border-bottom: none; }
+  .tech-item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 2px; }
+  .tech-item-name { font-weight: 500; line-height: 1.3; flex: 1; }
+  .tag {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tag-prod { background: #d1fae5; color: #065f46; }
+  .tag-progress { background: #dbeafe; color: #1e40af; }
+  .tag-overdue { background: var(--red-light); color: var(--red); }
+  .tag-hold { background: var(--amber-light); color: #92400e; }
+  .tag-notstarted { background: var(--surface-2); color: var(--text-muted); }
+  .tech-item-meta { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── BUGS ── */
+  .bug-card {
+    border-left: 4px solid;
+    padding: 11px 12px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 10px;
+    background: var(--surface);
+    font-size: 0.85rem;
+  }
+  .bug-card.critical { border-color: var(--red); }
+  .bug-card.major { border-color: var(--amber); }
+  .bug-card.minor { border-color: var(--green-mid); }
+  .bug-card.resolved { border-color: var(--green-light); opacity: 0.7; }
+  .bug-id { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
+  .bug-title { font-weight: 500; margin-bottom: 2px; }
+  .bug-module { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── INSIGHT BLOCKS ── */
+  .insight {
+    border-left: 3px solid var(--green-mid);
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    background: var(--surface);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+  }
+  .insight.risk { border-color: var(--red); }
+  .insight.warn { border-color: var(--amber); }
+  .insight.positive { border-color: var(--green-light); }
+  .insight-head {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .insight.risk .insight-head { color: var(--red); }
+  .insight.warn .insight-head { color: #92400e; }
+  .insight.positive .insight-head { color: #065f46; }
+
+  /* ── SEO ── */
+  .seo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .seo-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .seo-kpi-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--green-deep);
+    line-height: 1;
+  }
+  .seo-kpi-label { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+
+  /* ── SUMMARY OVERVIEW ── */
+  .summary-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 22px;
+  }
+  .summary-timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    padding: 0 0 18px 12px;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -15px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    border: 2px solid var(--paper);
+  }
+  .timeline-dot.amber { background: var(--amber); }
+  .timeline-dot.red { background: var(--red); }
+  .timeline-week {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .timeline-summary { font-size: 0.87rem; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--green-deep);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.72rem;
+    text-align: center;
+    padding: 20px 16px;
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+  .footer strong { color: rgba(255,255,255,0.8); }
+
+  /* ── CHIPS ── */
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 3px 10px;
+    font-size: 0.73rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .chip-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .chip-dot.green { background: var(--green-mid); }
+  .chip-dot.amber { background: var(--amber); }
+  .chip-dot.red { background: var(--red); }
+
+  /* Mobile tweaks */
+  @media (max-width: 380px) {
+    .dest-name { min-width: 88px; max-width: 88px; font-size: 0.76rem; }
+    .kpi-num { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="brand">Greytt<span style="color:var(--amber);">·</span>ai</div>
+  <div class="period">April 2026 · Monthly</div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="showTab('itineraries')">Itineraries</button>
+  <button class="tab-btn" onclick="showTab('destinations')">Destinations</button>
+  <button class="tab-btn" onclick="showTab('users')">Users</button>
+  <button class="tab-btn" onclick="showTab('tech')">Tech</button>
+  <button class="tab-btn" onclick="showTab('bugs')">Bugs</button>
+  <button class="tab-btn" onclick="showTab('seo')">SEO</button>
+</div>
+
+<!-- ─────────────────── OVERVIEW ─────────────────── -->
+<div class="section active" id="tab-overview">
+
+  <div class="hero">
+    <div class="hero-label">Internal Analytics · Confidential</div>
+    <h1>April <em>2026</em><br>Monthly Report</h1>
+    <div class="hero-sub">Itinerary Analytics &amp; Tech · Mar 30 – Apr 30, 2026</div>
+
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-num">1,510</div>
+        <div class="kpi-label">Total Itineraries</div>
+        <div class="kpi-delta up">↑ Strong month</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">25<sup>%</sup></div>
+        <div class="kpi-label">Avg Registered Rate</div>
+        <div class="kpi-delta up">↑ +4pp vs start</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">142</div>
+        <div class="kpi-label">Tech Tasks Completed</div>
+        <div class="kpi-delta neutral">80% completion</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">5</div>
+        <div class="kpi-label">Open Bugs (end Apr)</div>
+        <div class="kpi-delta up">↓ from 17 (Mar)</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 20px 16px;">
+
+    <div class="section-title">Month at a Glance</div>
+    <div class="section-sub">Five weeks tracked · Mar 30 – Apr 30, 2026</div>
+
+    <!-- Weekly volume trend -->
+    <div class="card">
+      <div class="card-title">Weekly Itinerary Volume</div>
+      <div class="week-trend">
+        <div class="week-col">
+          <div class="week-bar-wrap"><div class="week-bar" style="height:74%"></div></div>
+          <div class="week-num">301</div>
+          <div class="week-label">Mar 30–Apr 5</div>
+        </div>
+        <div class="week-col">
+          <div class="week-bar-wrap"><div class="week-bar" style="height:53%"></div></div>
+          <div class="week-num">217</div>
+          <div class="week-label">Apr 6–12<br><span style="font-size:0.58rem;color:var(--amber)">(5d only)</span></div>
+        </div>
+        <div class="week-col">
+          <div class="week-bar-wrap"><div class="week-bar peak" style="height:80%"></div></div>
+          <div class="week-num">324</div>
+          <div class="week-label">Apr 13–19 🔝</div>
+        </div>
+        <div class="week-col">
+          <div class="week-bar-wrap"><div class="week-bar" style="height:100%"></div></div>
+          <div class="week-num">414</div>
+          <div class="week-label">Apr 20–26</div>
+        </div>
+        <div class="week-col">
+          <div class="week-bar-wrap"><div class="week-bar" style="height:62%"></div></div>
+          <div class="week-num">254</div>
+          <div class="week-label">Apr 27–May 1<br><span style="font-size:0.58rem;color:var(--amber)">(5d only)</span></div>
+        </div>
+      </div>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;">Apr 20–26 was the strongest full week. Total across all 5 reporting periods: <strong>1,510 itineraries</strong>.</p>
+    </div>
+
+    <!-- Weekly narrative -->
+    <div class="card">
+      <div class="card-title">Week-by-Week Narrative</div>
+      <div class="summary-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot amber"></div>
+          <div class="timeline-week">Mar 30 – Apr 5</div>
+          <div class="timeline-summary"><strong>301 itineraries.</strong> Volume dipped 31% from prior week (Easter / month-end effect). Major bug clearance: 17 → 4 open bugs. Tokyo surged to #2 destination. Chat mode hit 31% share.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot red"></div>
+          <div class="timeline-week">Apr 6 – 12 (5 days)</div>
+          <div class="timeline-summary"><strong>217 itineraries</strong> over Wed–Sun only. KL surged to #2. 4 items shipped to production: Campaign Tracker, URL Thumbnails, Pop Quiz, Google Image fix. 6 in-progress items past deadline.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Apr 13 – 19</div>
+          <div class="timeline-summary"><strong>324 itineraries, ↑49% rebound.</strong> Bangkok surged 159% to #2. Singapore and HCMC both doubled. Registration at all-time high (82 registered users). BUG_065 resolved.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot amber"></div>
+          <div class="timeline-week">Apr 20 – 26</div>
+          <div class="timeline-summary"><strong>414 itineraries — peak week.</strong> 14 destinations served. SEO coverage at 45 pages indexed. 142 tech tasks completed to date. 11 in progress, 21 in backlog.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Apr 27 – May 1 (5 days)</div>
+          <div class="timeline-summary"><strong>254 itineraries.</strong> CTR jumped +73.9% to 5.93%. Indexed pages up to 61. Tech: 145 completed, 13 in progress. Bali, Tokyo, Bangkok = top 3.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key wins -->
+    <div class="card">
+      <div class="card-title">April Key Wins</div>
+      <div class="insight positive">
+        <div class="insight-head">✅ Bug Clearance</div>
+        Open bugs fell from 17 → 4 in the first week; held at 5–6 through month-end. Critical bugs cleared from 7 → 1.
+      </div>
+      <div class="insight positive">
+        <div class="insight-head">✅ Production Shipments</div>
+        Campaign Tracker (Klaviyo/Google Ads), URL Thumbnails, Pop Quiz, Google Image Fix, Signup Confirmation all shipped to production.
+      </div>
+      <div class="insight positive">
+        <div class="insight-head">✅ Registration Growth</div>
+        Registered user rate grew from 21% (Mar) to 26% peak — highest recorded. Absolute registered count hit 82 in week of Apr 13–19.
+      </div>
+      <div class="insight positive">
+        <div class="insight-head">✅ SEO Momentum</div>
+        Pages indexed grew from 0 to 61 through April. CTR hit 5.93% in final week — significantly ahead of industry average for early-stage travel platforms.
+      </div>
+    </div>
+
+    <!-- Risks -->
+    <div class="card">
+      <div class="card-title">Persistent Risks</div>
+      <div class="insight risk">
+        <div class="insight-head">🔴 Foundational Backlog Untouched</div>
+        Security Infrastructure, AI Model Redundancies, Automated Sentiment, Agentic AI Framework, Greytt Score for Sights — all still unstarted, now 8–9 months past their Aug 2025 deadlines.
+      </div>
+      <div class="insight warn">
+        <div class="insight-head">🟠 Deadline Slippage Chronic</div>
+        5–6 in-progress items remained past deadline every single week throughout April. SuperGryd, Score Automation, Hotel Finder, Voice Concierge — consistently overdue. Needs escalation and re-planning.
+      </div>
+      <div class="insight warn">
+        <div class="insight-head">🟠 BUG_069 Unresolved</div>
+        30–40s hotel listing load lag flagged as High priority, visible UX failure — carried unresolved for 3+ consecutive weeks.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────────── ITINERARIES ─────────────────── -->
+<div class="section" id="tab-itineraries">
+  <div class="section-title">Itinerary Analytics</div>
+  <div class="section-sub">Cumulative patterns across April 2026</div>
+
+  <div class="card">
+    <div class="card-title">Monthly Volume Summary</div>
+    <div class="stat-row"><span class="stat-label">Total Itineraries Generated</span><span class="stat-val">~1,510</span></div>
+    <div class="stat-row"><span class="stat-label">Peak Week</span><span class="stat-val">Apr 20–26 (414)</span></div>
+    <div class="stat-row"><span class="stat-label">Lowest Week (full)</span><span class="stat-val">Apr 13–19 (324, ↑49% rebound)</span></div>
+    <div class="stat-row"><span class="stat-label">Average Daily Rate (full weeks)</span><span class="stat-val">~45 itineraries/day</span></div>
+    <div class="stat-row"><span class="stat-label">Avg Trip Duration</span><span class="stat-val">6.1 – 8.1 days (avg ~6.5d)</span></div>
+    <div class="stat-row"><span class="stat-label">Median Trip Duration</span><span class="stat-val">5–6 days</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Generation Method — April Avg</div>
+    <div style="display:flex;gap:12px;margin-bottom:8px;">
+      <div style="flex:1;background:var(--green-deep);border-radius:8px;padding:14px;text-align:center;color:white;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;">72%</div>
+        <div style="font-size:0.75rem;opacity:0.7;margin-top:2px;">Plan Mode</div>
+      </div>
+      <div style="flex:1;background:var(--amber);border-radius:8px;padding:14px;text-align:center;color:var(--green-deep);">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;">28%</div>
+        <div style="font-size:0.75rem;opacity:0.8;margin-top:2px;">Chat (AI)</div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--text-muted);">Chat mode grew from 22% (Mar) to 31% (early Apr) before settling at ~28% for the month — a significant and sustained shift toward conversational AI interaction.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Travel Month Demand</div>
+    <div class="month-pills">
+      <div class="month-pill-row">
+        <div class="month-pill-label">April 2026</div>
+        <div class="month-pill-bar"><div class="month-pill-fill top" style="width:65%"><span class="month-pill-pct">29–39%</span></div></div>
+        <div class="month-pill-num">~279</div>
+      </div>
+      <div class="month-pill-row">
+        <div class="month-pill-label">May 2026</div>
+        <div class="month-pill-bar"><div class="month-pill-fill" style="width:55%"><span class="month-pill-pct">28–34%</span></div></div>
+        <div class="month-pill-num">~249</div>
+      </div>
+      <div class="month-pill-row">
+        <div class="month-pill-label">June 2026</div>
+        <div class="month-pill-bar"><div class="month-pill-fill" style="width:22%"><span class="month-pill-pct">13%</span></div></div>
+        <div class="month-pill-num">~99</div>
+      </div>
+      <div class="month-pill-row">
+        <div class="month-pill-label">July 2026</div>
+        <div class="month-pill-bar"><div class="month-pill-fill" style="width:12%"><span class="month-pill-pct">6–7%</span></div></div>
+        <div class="month-pill-num">~57</div>
+      </div>
+      <div class="month-pill-row">
+        <div class="month-pill-label">Oct–Nov 2026</div>
+        <div class="month-pill-bar"><div class="month-pill-fill" style="width:7%"><span class="month-pill-pct">3–4%</span></div></div>
+        <div class="month-pill-num">~38</div>
+      </div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;">April–May accounts for <strong>~57–63%</strong> of all near-term demand. May overtook April as top planned month by week 3. Conversion focus: this 8-week window.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Experience Preferences — April</div>
+    <div class="dest-bar-row"><div class="dest-name">Top Attractions</div><div class="dest-track"><div class="dest-fill amber" style="width:100%"><span class="dest-count">#1 all month</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name">Relaxed & Chill</div><div class="dest-track"><div class="dest-fill" style="width:82%"><span class="dest-count">#2</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name">Adventure & Sport</div><div class="dest-track"><div class="dest-fill" style="width:55%"><span class="dest-count">#3</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name">Culture & History</div><div class="dest-track"><div class="dest-fill" style="width:40%"><span class="dest-count">#4</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name">Natural Wonders</div><div class="dest-track"><div class="dest-fill" style="width:35%"><span class="dest-count">#5</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name">Arts & Theatre</div><div class="dest-track"><div class="dest-fill" style="width:25%"><span class="dest-count">↑ jumped</span></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Group Profile</div>
+    <div class="stat-row"><span class="stat-label">Couples (2 adults)</span><span class="stat-val">72–83% <span class="badge badge-neutral">dominant</span></span></div>
+    <div class="stat-row"><span class="stat-label">With Children</span><span class="stat-val">10–12%</span></div>
+    <div class="stat-row"><span class="stat-label">5-Star Hotel Share</span><span class="stat-val">77–82%</span></div>
+    <div class="stat-row"><span class="stat-label">Itineraries with Edits</span><span class="stat-val">~1–6 (very low)</span></div>
+  </div>
+
+  <div class="insight warn">
+    <div class="insight-head">⚠ Data Quality Flags</div>
+    Two records with 50 adults, one with 719-day trip duration — likely data entry errors. Input validation on adult count and date range fields recommended.
+  </div>
+</div>
+
+<!-- ─────────────────── DESTINATIONS ─────────────────── -->
+<div class="section" id="tab-destinations">
+  <div class="section-title">Destination Analysis</div>
+  <div class="section-sub">Monthly aggregate + week-by-week shifts</div>
+
+  <div class="card">
+    <div class="card-title">Top Destinations — April 2026 (aggregate)</div>
+    <div class="dest-bar-row"><div class="dest-name" title="Bali">🇮🇩 Bali</div><div class="dest-track"><div class="dest-fill amber" style="width:100%"><span class="dest-count">222 · 21%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Bangkok">🇹🇭 Bangkok</div><div class="dest-track"><div class="dest-fill" style="width:55%"><span class="dest-count">110 · 11%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Tokyo">🇯🇵 Tokyo</div><div class="dest-track"><div class="dest-fill" style="width:55%"><span class="dest-count">~123 · 10%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Seoul">🇰🇷 Seoul</div><div class="dest-track"><div class="dest-fill" style="width:49%"><span class="dest-count">~108 · 9%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="KL">🇲🇾 Kuala Lumpur</div><div class="dest-track"><div class="dest-fill" style="width:43%"><span class="dest-count">~95 · 8%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Singapore">🇸🇬 Singapore</div><div class="dest-track"><div class="dest-fill" style="width:43%"><span class="dest-count">~90 · 8%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Ho Chi Minh">🇻🇳 Ho Chi Minh</div><div class="dest-track"><div class="dest-fill" style="width:37%"><span class="dest-count">~87 · 7%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Phuket">🇹🇭 Phuket</div><div class="dest-track"><div class="dest-fill" style="width:33%"><span class="dest-count">~73 · 6%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Mumbai">🇮🇳 Mumbai</div><div class="dest-track"><div class="dest-fill" style="width:22%"><span class="dest-count">~53 · 5%</span></div></div></div>
+    <div class="dest-bar-row"><div class="dest-name" title="Melbourne">🇦🇺 Melbourne</div><div class="dest-track"><div class="dest-fill" style="width:14%"><span class="dest-count">~30 · 3%</span></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Destination Story — April</div>
+    <div class="insight positive">
+      <div class="insight-head">📍 Bali holds steady as #1</div>
+      Bali maintained ~20–22% share throughout the month despite volume swings. Its 5-star hotel-heavy supply matches the platform's premium user base well.
+    </div>
+    <div class="insight positive">
+      <div class="insight-head">📈 SE Asia dominates</div>
+      Bangkok, KL, Singapore, Ho Chi Minh, Phuket collectively account for ~40% of April bookings. SE Asia (ex-India) is the clearest growth corridor.
+    </div>
+    <div class="insight warn">
+      <div class="insight-head">🔄 Tokyo volatile week-to-week</div>
+      Tokyo surged to #2 in wk1 (13%), then pulled back to #3 (10%). Steady demand but seasonal fluctuation warrants monitoring for inventory prep.
+    </div>
+    <div class="insight positive">
+      <div class="insight-head">📈 Portfolio diversifying</div>
+      Top destination concentration fell from 37% (Mar) to ~21% in April — a healthier, more resilient distribution.
+    </div>
+    <div class="insight">
+      <div class="insight-head">🆕 New entries: New Delhi, Melbourne</div>
+      New Delhi made its first appearance. Melbourne jumped 167% in week 3 (from a low base). Organic international discovery widening.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Weekly Destination Highlights</div>
+    <div class="stat-row"><span class="stat-label">Wk 1 (Mar 30–Apr 5)</span><span class="stat-val">Tokyo surges ↑70%</span></div>
+    <div class="stat-row"><span class="stat-label">Wk 2 (Apr 6–12)</span><span class="stat-val">KL surges ↑67% to #2</span></div>
+    <div class="stat-row"><span class="stat-label">Wk 3 (Apr 13–19)</span><span class="stat-val">Bangkok ↑159%, HCMC ↑127%</span></div>
+    <div class="stat-row"><span class="stat-label">Wk 4 (Apr 20–26)</span><span class="stat-val">Bali #1, 14 destinations</span></div>
+    <div class="stat-row"><span class="stat-label">Wk 5 (Apr 27–May 1)</span><span class="stat-val">Bali, Tokyo, Bangkok = top 3</span></div>
+  </div>
+</div>
+
+<!-- ─────────────────── USERS ─────────────────── -->
+<div class="section" id="tab-users">
+  <div class="section-title">User Analytics</div>
+  <div class="section-sub">Geography, registration, and engagement</div>
+
+  <div class="card">
+    <div class="card-title">Top Source Countries — April</div>
+    <div class="geo-list">
+      <div class="geo-row">
+        <div class="geo-flag">🇮🇳</div>
+        <div class="geo-country">India</div>
+        <div class="geo-bar-wrap"><div class="geo-bar top" style="width:100%"></div></div>
+        <div class="geo-pct">54–63%</div>
+      </div>
+      <div class="geo-row">
+        <div class="geo-flag">🇮🇩</div>
+        <div class="geo-country">Indonesia</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" style="width:18%"></div></div>
+        <div class="geo-pct">8–11%</div>
+      </div>
+      <div class="geo-row">
+        <div class="geo-flag">🇲🇾</div>
+        <div class="geo-country">Malaysia</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" style="width:16%"></div></div>
+        <div class="geo-pct">6–10%</div>
+      </div>
+      <div class="geo-row">
+        <div class="geo-flag">🇵🇭</div>
+        <div class="geo-country">Philippines</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" style="width:8%"></div></div>
+        <div class="geo-pct">2–4%</div>
+      </div>
+      <div class="geo-row">
+        <div class="geo-flag">🇹🇭</div>
+        <div class="geo-country">Thailand</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" style="width:5%"></div></div>
+        <div class="geo-pct">~2%</div>
+      </div>
+      <div class="geo-row">
+        <div class="geo-flag">🌍</div>
+        <div class="geo-country">Others (30+ countries)</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" style="width:12%"></div></div>
+        <div class="geo-pct">~7–9%</div>
+      </div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;">33–37 countries represented across April. New entries: Greece, Croatia, Egypt, Belgium, Qatar, Saudi Arabia, UAE, Canada, Pakistan.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Registration Rate — Month Trend</div>
+    <div class="stat-row"><span class="stat-label">Mar 30–Apr 5</span><span class="stat-val">24% <span class="badge badge-up">↑ +3pp</span></span></div>
+    <div class="stat-row"><span class="stat-label">Apr 6–12</span><span class="stat-val">26% <span class="badge badge-up">↑ new high</span></span></div>
+    <div class="stat-row"><span class="stat-label">Apr 13–19</span><span class="stat-val">25% <span class="badge badge-neutral">stable</span></span></div>
+    <div class="stat-row"><span class="stat-label">Apr 20–26</span><span class="stat-val">~25% estimated</span></div>
+    <div class="stat-row"><span class="stat-label">Apr 27–May 1</span><span class="stat-val">~26% (35 unique users)</span></div>
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-top:10px;">Registration grew from 21% (start of March) to a sustained 25–26% throughout April. Absolute peak: 82 registered users in week of Apr 13–19 (highest volume full week).</p>
+  </div>
+
+  <div class="insight positive">
+    <div class="insight-head">✅ SE Asia emerging as key user base</div>
+    Indonesia + Malaysia together account for 15–20% of users consistently throughout April. Combined with their top destination preferences (KL, Bali, Bangkok), they represent a high-intent, conversion-ready segment.
+  </div>
+  <div class="insight warn">
+    <div class="insight-head">🟠 Anonymous users still ~75%</div>
+    Despite registration rate improvement, 74–76% of users remain anonymous. A post-itinerary registration prompt or save-itinerary incentive could accelerate conversion toward the 30% target.
+  </div>
+</div>
+
+<!-- ─────────────────── TECH ─────────────────── -->
+<div class="section" id="tab-tech">
+  <div class="section-title">Tech Project Status</div>
+  <div class="section-sub">April 2026 delivery summary</div>
+
+  <div class="card">
+    <div class="card-title">Project Tracker — End of April</div>
+    <div class="stat-row"><span class="stat-label">Total Work Items</span><span class="stat-val">177</span></div>
+    <div class="stat-row"><span class="stat-label">Completed</span><span class="stat-val">142–145 <span class="badge badge-up">80%</span></span></div>
+    <div class="stat-row"><span class="stat-label">In Progress</span><span class="stat-val">11–13</span></div>
+    <div class="stat-row"><span class="stat-label">Not Started (Q2 backlog)</span><span class="stat-val">21–22</span></div>
+    <div class="stat-row"><span class="stat-label">On Hold</span><span class="stat-val">3</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Shipped to Production — April</div>
+
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Campaign Automated Tracker (Klaviyo / Google Ads)</div><span class="tag tag-prod">Prod</span></div>
+      <div class="tech-item-meta">Shipped week of Apr 6–12</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">URL Thumbnails — all shared pages</div><span class="tag tag-prod">Prod</span></div>
+      <div class="tech-item-meta">Shipped week of Apr 6–12</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Pop Quiz (free 3-month access reward)</div><span class="tag tag-prod">Prod</span></div>
+      <div class="tech-item-meta">Shipped week of Apr 6–12</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Google Image API Fix</div><span class="tag tag-prod">Prod</span></div>
+      <div class="tech-item-meta">Shipped week of Apr 6–12</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Signup Confirmation Flow</div><span class="tag tag-prod">Prod</span></div>
+      <div class="tech-item-meta">Shipped week of Apr 13–19</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔴 Overdue In-Progress Items (Persistent)</div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Voice Concierge Integration</div><span class="tag tag-overdue">Overdue</span></div>
+      <div class="tech-item-meta">Deadline: Apr 15 · Missed; sub-preference impl. ongoing</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Greytt Score Automation / Digital Audit</div><span class="tag tag-overdue">Overdue</span></div>
+      <div class="tech-item-meta">Deadline: Apr 15 · Missed; no completion date</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">SuperGryd Integration (GTB)</div><span class="tag tag-overdue">Overdue</span></div>
+      <div class="tech-item-meta">Deadline: Apr 15 · Missed; remained in progress all month</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Cross-Channel Personalisation Testing</div><span class="tag tag-overdue">Overdue</span></div>
+      <div class="tech-item-meta">Deadline: Apr 15 · Missed</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Greytt Hotel Finder Tool</div><span class="tag tag-overdue">Overdue</span></div>
+      <div class="tech-item-meta">Backend check ongoing; data ready. Deadline Apr 22 missed.</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">B2B API Access V1 (GTB Q2)</div><span class="tag tag-overdue">Overdue</span></div>
+      <div class="tech-item-meta">Assigned Apr 22 deadline; no dev activity logged</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔵 On Hold</div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Klook Experiences Integration</div><span class="tag tag-hold">On Hold</span></div>
+      <div class="tech-item-meta">No API access from Klook; exploring widget fallback</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Guided Onboarding Flow</div><span class="tag tag-hold">On Hold</span></div>
+      <div class="tech-item-meta">Pending Hotel Finder completion</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Being Sattvaa — Refresh & Renew</div><span class="tag tag-hold">On Hold</span></div>
+      <div class="tech-item-meta">Business decision — booking engine rescoping needed</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠ Q2 Backlog — Not Started, No Owner</div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Marketplace (Products & Experiences)</div><span class="tag tag-notstarted">High</span></div>
+      <div class="tech-item-meta">No owner, no deadline — revenue-enabling</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">On-Platform Booking Engine</div><span class="tag tag-notstarted">Moderate</span></div>
+      <div class="tech-item-meta">No owner, no deadline</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Security Infrastructure</div><span class="tag tag-notstarted">High</span></div>
+      <div class="tech-item-meta">Originally due Aug 2025 — 9 months overdue</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">AI Model Redundancies (LLM failover)</div><span class="tag tag-notstarted">High</span></div>
+      <div class="tech-item-meta">Originally due Aug 2025 — no LLM failover in prod</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-top"><div class="tech-item-name">Greytt Score for Sights</div><span class="tag tag-notstarted">High</span></div>
+      <div class="tech-item-meta">Originally due Oct 2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── BUGS ─────────────────── -->
+<div class="section" id="tab-bugs">
+  <div class="section-title">Bug Tracker</div>
+  <div class="section-sub">Status at end of April 2026</div>
+
+  <div class="card">
+    <div class="card-title">Bug Queue Summary</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
+      <div style="text-align:center;background:var(--surface-2);border-radius:8px;padding:12px 8px;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--green-deep);">70+</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">Total Logged</div>
+      </div>
+      <div style="text-align:center;background:#d1fae5;border-radius:8px;padding:12px 8px;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#065f46;">62+</div>
+        <div style="font-size:0.7rem;color:#065f46;">Resolved</div>
+      </div>
+      <div style="text-align:center;background:var(--red-light);border-radius:8px;padding:12px 8px;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--red);">5</div>
+        <div style="font-size:0.7rem;color:var(--red);">Open</div>
+      </div>
+    </div>
+    <div class="stat-row"><span class="stat-label">Open at start (Mar)</span><span class="stat-val">17 <span class="badge badge-down">Critical: 7</span></span></div>
+    <div class="stat-row"><span class="stat-label">Open at end of April</span><span class="stat-val">5 <span class="badge badge-up">Critical: 0</span></span></div>
+    <div class="stat-row"><span class="stat-label">Biggest single-week drop</span><span class="stat-val">17→4 (Mar 30–Apr 5)</span></div>
+    <div class="stat-row"><span class="stat-label">New bugs logged in April</span><span class="stat-val">~17 new entries</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🟡 Open Bugs — End of April</div>
+    <div class="bug-card major">
+      <div class="bug-id">BUG_060 · Major</div>
+      <div class="bug-title">Traveler change not affecting hotel recommendations</div>
+      <div class="bug-module">Hotels · Ongoing since Mar; regression suspected</div>
+    </div>
+    <div class="bug-card minor">
+      <div class="bug-id">BUG_038 · Minor</div>
+      <div class="bug-title">Some places not showing Greytt Score during generation</div>
+      <div class="bug-module">Greytt Score · Carried open all month</div>
+    </div>
+    <div class="bug-card major">
+      <div class="bug-id">BUG_069 · High · 3+ Weeks</div>
+      <div class="bug-title">Hotel listing — 30–40s load lag after popup closes</div>
+      <div class="bug-module">Hotel Listing · Visible UX failure; unresolved 3 consecutive weeks</div>
+    </div>
+    <div class="bug-card minor">
+      <div class="bug-id">BUG_066 · Low</div>
+      <div class="bug-title">Chatbot popup UI alignment broken</div>
+      <div class="bug-module">Chatbot UI</div>
+    </div>
+    <div class="bug-card minor">
+      <div class="bug-id">BUG_067 · Medium</div>
+      <div class="bug-title">Irrelevant commentary in itinerary descriptions</div>
+      <div class="bug-module">AI Output · Prompt optimisation candidate</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Notable Bugs Resolved in April</div>
+    <div class="bug-card resolved">
+      <div class="bug-id">BUG_058 · Was Critical</div>
+      <div class="bug-title">Personalization sections not clickable — resolved wk1</div>
+    </div>
+    <div class="bug-card resolved">
+      <div class="bug-id">BUG_065 · Was High/Major</div>
+      <div class="bug-title">Itinerary not auto-generating after premium popup — resolved wk3</div>
+    </div>
+    <div class="bug-card resolved">
+      <div class="bug-id">BUG_063 · Resolved</div>
+      <div class="bug-title">3-month plan not disabled for lifetime plan users</div>
+    </div>
+    <div class="bug-card resolved">
+      <div class="bug-id">BUG_057 · Resolved</div>
+      <div class="bug-title">Header not visible on iPhone for Aqua page</div>
+    </div>
+    <div class="bug-card resolved">
+      <div class="bug-id">BUG_061–062 · Resolved</div>
+      <div class="bug-title">Cross-selection errors + Google image generation (rare case)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔵 Blocked (Awaiting Decision)</div>
+    <div class="bug-card" style="border-color:var(--blue);">
+      <div class="bug-id">BUG_025 + BUG_026</div>
+      <div class="bug-title">Hotels not generated for trips &gt;30 days; max trip duration not restricted</div>
+      <div class="bug-module">Awaiting product decision on maximum trip duration</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── SEO ─────────────────── -->
+<div class="section" id="tab-seo">
+  <div class="section-title">SEO &amp; Search</div>
+  <div class="section-sub">Coverage and performance — first full month of SEO data</div>
+
+  <div class="seo-grid" style="margin-bottom:14px;">
+    <div class="seo-kpi">
+      <div class="seo-kpi-num">61</div>
+      <div class="seo-kpi-label">Pages Indexed</div>
+    </div>
+    <div class="seo-kpi">
+      <div class="seo-kpi-num">35</div>
+      <div class="seo-kpi-label">Not Yet Indexed</div>
+    </div>
+    <div class="seo-kpi">
+      <div class="seo-kpi-num">5.93<span style="font-size:1rem;">%</span></div>
+      <div class="seo-kpi-label">CTR (end Apr)</div>
+    </div>
+    <div class="seo-kpi">
+      <div class="seo-kpi-num">9.08</div>
+      <div class="seo-kpi-label">Avg Position</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Search Performance — April Progression</div>
+    <div class="stat-row"><span class="stat-label">Week of Apr 20–26</span><span class="stat-val">40 impressions · 0% CTR</span></div>
+    <div class="stat-row"><span class="stat-label">Week of Apr 27–May 1</span><span class="stat-val">308 impressions · 5.93% CTR <span class="badge badge-up">↑ +74%</span></span></div>
+    <div class="stat-row"><span class="stat-label">Clicks (Apr 27–May 1)</span><span class="stat-val">18 clicks</span></div>
+    <div class="stat-row"><span class="stat-label">Avg Position</span><span class="stat-val">9.08 (bottom of page 1)</span></div>
+    <div class="stat-row"><span class="stat-label">Index Rate</span><span class="stat-val">63.5% (61 of 96 pages)</span></div>
+  </div>
+
+  <div class="insight positive">
+    <div class="insight-head">✅ CTR recovery is significant</div>
+    Moving from 0% CTR to 5.93% in one week is a meaningful improvement. This suggests title/meta descriptions were optimized, or higher-relevance queries are now triggering Greytt pages.
+  </div>
+  <div class="insight warn">
+    <div class="insight-head">🟠 Position 9 = bottom of page 1</div>
+    Average position 9.08 means most clicks come from bottom-of-page impressions. Focus on top-3 destination pages (Bali, Bangkok, Tokyo) for structured data and content depth to push above position 5.
+  </div>
+  <div class="insight">
+    <div class="insight-head">📋 36% of pages not yet indexed</div>
+    35 pages remain unindexed. Addressing crawl budget, internal linking, and sitemap hygiene should be the immediate SEO priority for May.
+  </div>
+
+  <div class="card">
+    <div class="card-title">May SEO Priorities</div>
+    <div class="stat-row"><span class="stat-label">1. Fix 35 unindexed pages</span><span class="stat-val badge badge-amber">High</span></div>
+    <div class="stat-row"><span class="stat-label">2. Optimize title / meta for top destinations</span><span class="stat-val badge badge-amber">High</span></div>
+    <div class="stat-row"><span class="stat-label">3. Structured data (schema.org TravelAction)</span><span class="stat-val badge badge-neutral">Med</span></div>
+    <div class="stat-row"><span class="stat-label">4. Build internal links from blog → itinerary pages</span><span class="stat-val badge badge-neutral">Med</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  <strong>Greytt · Internal Analytics · Confidential</strong><br>
+  April 2026 Monthly Report · Compiled from 5 weekly reports (Mar 30 – May 1, 2026)<br>
+  Generated May 11, 2026
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
