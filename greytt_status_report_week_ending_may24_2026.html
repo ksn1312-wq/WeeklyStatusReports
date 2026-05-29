@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greytt — Weekly Status Report | Week Ending May 24, 2026</title>
+<style>
+  :root {
+    --bg: #f0f7f2;
+    --surface: #ffffff;
+    --surface-tinted: #e6f3eb;
+    --accent: #1f6b3a;
+    --accent-mid: #2e8b50;
+    --accent-light: #4aab6b;
+    --accent-pale: #c8e8d4;
+    --accent-ultralight: #e6f5ec;
+    --header-bg: #1a5c32;
+    --header-text: #ffffff;
+    --header-sub: rgba(255,255,255,0.68);
+    --header-label: rgba(255,255,255,0.42);
+    --border: rgba(31,107,58,0.13);
+    --border-mid: rgba(31,107,58,0.22);
+    --text: #112318;
+    --text-muted: #3d6349;
+    --text-hint: #7fa88a;
+    --section-label: #4a8a5e;
+    --bar-track: rgba(31,107,58,0.10);
+    --bar-fill: linear-gradient(90deg, #2e8b50, #4aab6b);
+    --metric-top: linear-gradient(135deg, #e6f5ec 0%, #f0faf4 100%);
+    --green-badge-bg: #d1edd9;
+    --green-badge-text: #155028;
+    --amber-badge-bg: #fef3d6;
+    --amber-badge-text: #7a4a00;
+    --blue-badge-bg: #deeeff;
+    --blue-badge-text: #0d3d7a;
+    --gray-badge-bg: #e8ede9;
+    --gray-badge-text: #3d5442;
+    --red-badge-bg: #fde8e8;
+    --red-badge-text: #7a1a1a;
+    --highlight-bg: #e0f0e7;
+    --highlight-border: #2e8b50;
+    --highlight-text: #1a5c32;
+    --delta-up: #1f6b3a;
+    --delta-flat: #7fa88a;
+    --delta-down: #a32020;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px; }
+
+  /* ── HEADER ─────────────────────────────── */
+  .header {
+    background: var(--header-bg);
+    padding: 22px 20px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: -50px; right: -20px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute; bottom: -30px; right: 60px;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--header-label); margin-bottom: 7px;
+  }
+  .header h1 {
+    font-size: 21px; font-weight: 500;
+    color: var(--header-text); margin-bottom: 4px;
+  }
+  .header-sub { font-size: 12px; color: var(--header-sub); }
+  .header-stripe {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-light), var(--accent-pale));
+    border-radius: 2px; width: 52px; margin-top: 18px;
+  }
+
+  /* ── LAYOUT ──────────────────────────────── */
+  .content { padding: 20px; max-width: 620px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.10em;
+    color: var(--section-label);
+    margin: 28px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 0.5px;
+    background: var(--border-mid);
+  }
+
+  /* ── METRIC CARDS ─────────────────────────── */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; margin-bottom: 10px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 14px 16px;
+    position: relative; overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent-pale), var(--accent-ultralight));
+  }
+  .metric-label {
+    font-size: 11px; font-weight: 500;
+    color: var(--text-muted); margin-bottom: 5px;
+  }
+  .metric-value {
+    font-size: 28px; font-weight: 500;
+    color: var(--text); line-height: 1.0;
+  }
+  .metric-delta { font-size: 11px; margin-top: 4px; }
+  .delta-up { color: var(--delta-up); }
+  .delta-flat { color: var(--delta-flat); }
+  .delta-down { color: var(--delta-down); }
+
+  /* ── CARDS ─────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 16px; margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); margin-bottom: 14px;
+  }
+
+  .highlight-bar {
+    background: var(--highlight-bg);
+    border-left: 3px solid var(--highlight-border);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: 12px 14px; font-size: 13px;
+    color: var(--highlight-text); margin-bottom: 10px; line-height: 1.6;
+  }
+  .highlight-bar strong { font-weight: 500; color: var(--accent); }
+
+  /* ── DESTINATION BARS ─────────────────────── */
+  .dest-bar-row { margin-bottom: 11px; }
+  .dest-bar-row:last-child { margin-bottom: 0; }
+  .dest-bar-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--text-muted); margin-bottom: 4px;
+  }
+  .dest-bar-label span:last-child { color: var(--accent); font-weight: 600; }
+  .dest-bar-track {
+    height: 6px; background: var(--bar-track);
+    border-radius: 3px; overflow: hidden;
+  }
+  .dest-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 0.3s;
+  }
+
+  /* ── STAT ROWS ────────────────────────────── */
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row-label { color: var(--text-muted); }
+  .stat-row-value { font-weight: 500; color: var(--text); }
+
+  /* ── BADGES ─────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+  }
+  .badge-green  { background: var(--green-badge-bg);  color: var(--green-badge-text); }
+  .badge-amber  { background: var(--amber-badge-bg);  color: var(--amber-badge-text); }
+  .badge-blue   { background: var(--blue-badge-bg);   color: var(--blue-badge-text); }
+  .badge-gray   { background: var(--gray-badge-bg);   color: var(--gray-badge-text); }
+  .badge-red    { background: var(--red-badge-bg);    color: var(--red-badge-text); }
+
+  /* ── PROGRESS ITEMS ─────────────────────────── */
+  .progress-item {
+    padding: 11px 0; border-bottom: 0.5px solid var(--border); font-size: 13px;
+  }
+  .progress-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .progress-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 8px; margin-bottom: 4px;
+  }
+  .progress-name { font-weight: 500; color: var(--text); flex: 1; }
+  .progress-desc { color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+
+  /* ── TWO COL ─────────────────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── SEARCH TABLE ─────────────────────────────── */
+  .search-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 0.5px solid var(--border); font-size: 12px;
+  }
+  .search-row:last-child { border-bottom: none; }
+  .search-query { font-family: 'SF Mono', monospace; color: var(--text); }
+  .search-stats { display: flex; gap: 14px; color: var(--text-muted); }
+  .search-stats span { min-width: 30px; text-align: right; }
+
+  /* ── CHART ────────────────────────────────────── */
+  .chart-wrap { position: relative; width: 100%; height: 180px; margin-top: 12px; }
+
+  /* ── ENGINEERING ROADMAP ─────────────────────── */
+  .roadmap-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 0.5px solid var(--border);
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    margin-top: 5px; flex-shrink: 0;
+  }
+  .dot-green  { background: var(--accent-mid); }
+  .dot-amber  { background: #e09b20; }
+  .dot-gray   { background: #aabfad; }
+  .dot-blue   { background: #2a74c0; }
+  .roadmap-text { flex: 1; }
+  .roadmap-name { font-weight: 500; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .roadmap-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── FOOTER ─────────────────────────────────── */
+  .footer {
+    text-align: center; padding: 24px 20px 30px;
+    font-size: 11px; color: var(--text-hint);
+    border-top: 0.5px solid var(--border); margin-top: 32px; line-height: 1.8;
+  }
+  .footer-leaf {
+    display: inline-block; width: 24px; height: 2px;
+    background: var(--accent-pale); border-radius: 1px;
+    vertical-align: middle; margin: 0 6px;
+  }
+
+  @media (max-width: 400px) {
+    .metric-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Greytt &middot; Tech &amp; Product</div>
+  <h1>Weekly Status Report</h1>
+  <div class="header-sub">Week ending May 24, 2026 &nbsp;&middot;&nbsp; Prepared May 29, 2026</div>
+  <div class="header-stripe"></div>
+</div>
+
+<div class="content">
+
+  <!-- PLATFORM ACTIVITY -->
+  <div class="section-label">Platform activity &middot; May 18&ndash;24</div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-label">Itineraries generated</div>
+      <div class="metric-value">257</div>
+      <div class="metric-delta delta-up">↑ 21% vs prior week</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Unique destinations</div>
+      <div class="metric-value">24</div>
+      <div class="metric-delta delta-up">↑ incl. Kyoto, Auckland</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Registered quiz escapes</div>
+      <div class="metric-value">23</div>
+      <div class="metric-delta delta-up">↑ steady sign-ups</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Itinerary revisions</div>
+      <div class="metric-value">3</div>
+      <div class="metric-delta delta-flat">hotel &amp; activity edits</div>
+    </div>
+  </div>
+
+  <div class="highlight-bar">
+    <strong>Strong week.</strong> Bali leads with 52 itineraries (20% share), Bangkok surges to 43 (up from ~35 prior week), Singapore enters the top 3 at 24. Tokyo posts 27 — its highest week to date. New destinations Kyoto, Auckland and Queenstown recorded their first itineraries this week.
+  </div>
+
+  <!-- DESTINATIONS -->
+  <div class="section-label">Top destinations</div>
+
+  <div class="card">
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Bali, Indonesia</span><span>52</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:100%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Bangkok, Thailand</span><span>43</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:83%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Tokyo, Japan</span><span>27</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:52%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Singapore, Singapore</span><span>24</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:46%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Seoul, South Korea</span><span>16</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:31%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Kuala Lumpur, Malaysia</span><span>15</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:29%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Phuket, Thailand</span><span>15</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:29%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Ho Chi Minh, Vietnam</span><span>12</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:23%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Sydney + Melbourne (AU)</span><span>12</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:23%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Other (Jakarta, Goa, Siem Reap, Colombo…)</span><span>21</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:40%"></div></div>
+    </div>
+  </div>
+
+  <!-- USER PROFILE -->
+  <div class="section-label">User profile snapshot</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Generation method</div>
+      <div class="stat-row"><span class="stat-row-label">Plan (search)</span><span class="stat-row-value">54%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Chat</span><span class="stat-row-value">46%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Group type</div>
+      <div class="stat-row"><span class="stat-row-label">Couples</span><span class="stat-row-value">58%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Family</span><span class="stat-row-value">24%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Friends / solo</span><span class="stat-row-value">18%</span></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Top user markets</div>
+      <div class="stat-row"><span class="stat-row-label">India (IN)</span><span class="stat-row-value">~46%</span></div>
+      <div class="stat-row"><span class="stat-row-label">SE Asia (MY/ID/PH)</span><span class="stat-row-value">~26%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Other (AU/ZA/AE…)</span><span class="stat-row-value">~28%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Travel cadence (quiz)</div>
+      <div class="stat-row"><span class="stat-row-label">Long immersive</span><span class="stat-row-value">39%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Spontaneous</span><span class="stat-row-value">35%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Short quality</span><span class="stat-row-value">26%</span></div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE TYPES -->
+  <div class="section-label">Top experience types this week</div>
+
+  <div class="card">
+    <div class="stat-row">
+      <span class="stat-row-label">Relaxed &amp; Chill</span>
+      <span class="stat-row-value">~31%</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Top Attractions</span>
+      <span class="stat-row-value">~29%</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Foodie Explorations</span>
+      <span class="stat-row-value">~14%</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Adventure &amp; Sport</span>
+      <span class="stat-row-value">~12%</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Culture &amp; History / Natural Wonders / Other</span>
+      <span class="stat-row-value">~14%</span>
+    </div>
+  </div>
+
+  <!-- TECH & PRODUCT -->
+  <div class="section-label">Tech &amp; product &middot; sprint progress</div>
+
+  <div class="card">
+    <div class="card-title">Shipped / in production this week</div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">DB image caching (Google Images API fix)</span>
+        <span class="badge badge-green">Prod</span>
+      </div>
+      <div class="progress-desc">Permanent fix for Google Images API latency &amp; cost moved to production. DB now caches sight and hotel images, eliminating repeated API calls. Confirmed for all 13 existing cities.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Greytt Score automation &middot; new city data push</span>
+        <span class="badge badge-green">Prod</span>
+      </div>
+      <div class="progress-desc">2,611 hotels scored. Phase 1 old set plus 17 new cities plus 899 new sights underway. 30-city cycle (KL &amp; Bangkok repeat; others pending) kicked off. New agoda master list filtering in progress for non-hotel/resort entries.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Klook integration</span>
+        <span class="badge badge-amber">Moved to Staging</span>
+      </div>
+      <div class="progress-desc">Credentials received. API access pending from Klook. Widget integration explored as interim; staging build in progress. DB update with Klook sight links to follow once full access confirmed. Consideration to replace Viator links with Klook in sights DB.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Chat enhancement v2</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Country → city split flow explored in dev. Prompt enhancements completed. UI exploration referencing popular platforms underway. More exploration required before staging push; applicable to chat, search, and voice.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Voice concierge</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Gemini-style conversational UI implemented. Preference selection and itinerary redirection working. API token limits under review. Flow-breaking issue being investigated by Madhavan before staging push. Sub-preference flow to be added.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">B2B API Access v1</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">First version in progress. Frontend implementation kicked off this week. Target: v1 frontend by end of w/c May 29.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Greytt Campaign tracker</span>
+        <span class="badge badge-green">Completed</span>
+      </div>
+      <div class="progress-desc">Klaviyo &amp; Google Ads personalisation automation completed. Rama to share Meta campaign details to finalise integration.</div>
+    </div>
+
+  </div>
+
+  <!-- IN-FLIGHT / ON HOLD -->
+  <div class="section-label">In-flight &amp; on hold</div>
+
+  <div class="card">
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">SuperGryd integration</span>
+        <span class="badge badge-gray">Hold</span>
+      </div>
+      <div class="progress-desc">Pending confirmation from SuperGryd. Discussion active as of late April. No update this week.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Being Sattva refresh &amp; renew (booking engine)</span>
+        <span class="badge badge-gray">Hold</span>
+      </div>
+      <div class="progress-desc">Date/room/occupancy flow + Stripe payment. On hold pending business sign-off. Being Sattva Ayurveda retreat page already live.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Guided on-boarding flow</span>
+        <span class="badge badge-gray">Hold</span>
+      </div>
+      <div class="progress-desc">Get-started video, tooltips, guidance messages. Deferred — to revisit with hotel finder functionality rollout.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Marketplace (products &amp; experiences)</span>
+        <span class="badge badge-gray">Hold</span>
+      </div>
+      <div class="progress-desc">Q2 priority. Details to be provided by Preethi. Linked to Booking Orchestration Engine.</div>
+    </div>
+
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">On-platform Booking Engine</span>
+        <span class="badge badge-gray">Not started</span>
+      </div>
+      <div class="progress-desc">Q2 priority. Linked to SuperGryd. No movement this week.</div>
+    </div>
+  </div>
+
+  <!-- COMMERCIAL / EXPERIENCE -->
+  <div class="section-label">Experience &amp; commercial</div>
+
+  <div class="card">
+    <div class="stat-row">
+      <span class="stat-row-label">Aqua Expeditions page</span>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Being Sattva Ayurveda retreat</span>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Rezdy experience booking</span>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Greytt Hotel Finder tool</span>
+      <span class="badge badge-green">Completed</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Stripe SG Journeys + Moves</span>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Greytt Score automation (2,611 hotels)</span>
+      <span class="badge badge-green">Prod</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-row-label">Klook widget integration</span>
+      <span class="badge badge-amber">Staging</span>
+    </div>
+  </div>
+
+  <!-- ENGINEERING ROADMAP -->
+  <div class="section-label">Engineering roadmap &middot; Q2 status</div>
+
+  <div class="card">
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-green"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Voice AI Pipeline (STT + NLP + LLM + TTS)</div>
+        <div class="roadmap-desc">In progress — preference selection and Gemini-style UI implemented. Token/API issues being resolved before staging.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-green"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">API Gateway + Partner Auth (B2B v1)</div>
+        <div class="roadmap-desc">In progress — first frontend implementation started; v1 target by end of May.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-amber"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Observatory, Cost Controls &amp; Model Telemetry</div>
+        <div class="roadmap-desc">In progress — using ChatGPT (base) for itinerary generation, Gemini (top tier) for audit, Claude (free) for hotel listing audit. Cost optimisation ongoing.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-gray"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Booking Orchestration Engine</div>
+        <div class="roadmap-desc">Hold — linked to SuperGryd confirmation.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-gray"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Search + Ranking + Recommendation System</div>
+        <div class="roadmap-desc">Hold — planned as part of Hotel Finder tool expansion.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-gray"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">LLM Orchestration + Prompt Management Platform</div>
+        <div class="roadmap-desc">Not started — will provide UI for business team to update prompts directly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPCOMING PRIORITIES -->
+  <div class="section-label">Upcoming priorities &middot; week of May 25</div>
+
+  <div class="card">
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Voice concierge → staging</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Resolve token limits, finalise sub-preference flow, push to staging for testing. Madhavan to diagnose flow-breaking issue.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Greytt Score · 30-city data cycle</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Complete KL &amp; Bangkok repeat cycle. Process pending counts for other 28 locations. Filter non-hotel/resort entries from agoda master list.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Chat v2 → staging push</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Implement country/city split. Push prompt &amp; UI changes to staging. Apply to chat, search, and voice paths.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Klook API access follow-up</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Chase API access from Klook. If still pending, integrate via partner widget links as interim. Begin DB update with Klook sight links.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">B2B API v1 frontend</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Complete and demo v1 frontend for B2B API access. Share with Rama for review.</div>
+    </div>
+    <div class="progress-item" style="border-bottom:none;">
+      <div class="progress-header">
+        <span class="progress-name">Meta campaign details → Rama to share</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Rama to share Meta campaign details so campaign tracker integration can be finalised.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Greytt Tech &amp; Product <span class="footer-leaf"></span> Week ending May 24, 2026<br>
+  Prepared May 29, 2026 &nbsp;&middot;&nbsp; Data sourced from weekly itinerary DB, project tracker &amp; AI search console
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// Destination chart
+const destCtx = document.createElement('canvas');
+const destCard = document.querySelector('.dest-bar-row').parentElement;
+
+// Animate bars on page load
+document.querySelectorAll('.dest-bar-fill').forEach(bar => {
+  const w = bar.style.width;
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = w; }, 120);
+});
+</script>
+</body>
+</html>
