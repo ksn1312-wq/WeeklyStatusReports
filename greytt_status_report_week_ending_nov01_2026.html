@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greytt — Weekly Status Report | Week Ending Nov 1, 2026</title>
+<style>
+  :root {
+    --bg: #f0f7f2;
+    --surface: #ffffff;
+    --surface-tinted: #e6f3eb;
+    --accent: #1f6b3a;
+    --accent-mid: #2e8b50;
+    --accent-light: #4aab6b;
+    --accent-pale: #c8e8d4;
+    --accent-ultralight: #e6f5ec;
+    --header-bg: #1a5c32;
+    --header-text: #ffffff;
+    --header-sub: rgba(255,255,255,0.68);
+    --header-label: rgba(255,255,255,0.42);
+    --border: rgba(31,107,58,0.13);
+    --border-mid: rgba(31,107,58,0.22);
+    --text: #112318;
+    --text-muted: #3d6349;
+    --text-hint: #7fa88a;
+    --section-label: #4a8a5e;
+    --bar-track: rgba(31,107,58,0.10);
+    --bar-fill: linear-gradient(90deg, #2e8b50, #4aab6b);
+    --metric-top: linear-gradient(135deg, #e6f5ec 0%, #f0faf4 100%);
+    --green-badge-bg: #d1edd9;
+    --green-badge-text: #155028;
+    --amber-badge-bg: #fef3d6;
+    --amber-badge-text: #7a4a00;
+    --blue-badge-bg: #deeeff;
+    --blue-badge-text: #0d3d7a;
+    --gray-badge-bg: #e8ede9;
+    --gray-badge-text: #3d5442;
+    --red-badge-bg: #fde8e8;
+    --red-badge-text: #7a1a1a;
+    --highlight-bg: #e0f0e7;
+    --highlight-border: #2e8b50;
+    --highlight-text: #1a5c32;
+    --delta-up: #1f6b3a;
+    --delta-flat: #7fa88a;
+    --delta-down: #a32020;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px; }
+
+  /* ── HEADER ─────────────────────────────── */
+  .header {
+    background: var(--header-bg);
+    padding: 22px 20px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: -50px; right: -20px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute; bottom: -30px; right: 60px;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--header-label); margin-bottom: 7px;
+  }
+  .header h1 {
+    font-size: 21px; font-weight: 500;
+    color: var(--header-text); margin-bottom: 4px;
+  }
+  .header-sub { font-size: 12px; color: var(--header-sub); }
+  .header-stripe {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-light), var(--accent-pale));
+    border-radius: 2px; width: 52px; margin-top: 18px;
+  }
+
+  /* ── LAYOUT ──────────────────────────────── */
+  .content { padding: 20px; max-width: 620px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.10em;
+    color: var(--section-label);
+    margin: 28px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 0.5px;
+    background: var(--border-mid);
+  }
+
+  /* ── METRIC CARDS ─────────────────────────── */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; margin-bottom: 10px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 14px 16px;
+    position: relative; overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent-pale), var(--accent-ultralight));
+  }
+  .metric-label {
+    font-size: 11px; font-weight: 500;
+    color: var(--text-muted); margin-bottom: 5px;
+  }
+  .metric-value {
+    font-size: 28px; font-weight: 500;
+    color: var(--text); line-height: 1.0;
+  }
+  .metric-delta { font-size: 11px; margin-top: 4px; }
+  .delta-up { color: var(--delta-up); }
+  .delta-flat { color: var(--delta-flat); }
+  .delta-down { color: var(--delta-down); }
+
+  /* ── CARDS ─────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 16px; margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); margin-bottom: 14px;
+  }
+
+  .highlight-bar {
+    background: var(--highlight-bg);
+    border-left: 3px solid var(--highlight-border);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: 12px 14px; font-size: 13px;
+    color: var(--highlight-text); margin-bottom: 10px; line-height: 1.6;
+  }
+  .highlight-bar strong { font-weight: 500; color: var(--accent); }
+
+  /* ── DESTINATION BARS ─────────────────────── */
+  .dest-bar-row { margin-bottom: 11px; }
+  .dest-bar-row:last-child { margin-bottom: 0; }
+  .dest-bar-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--text-muted); margin-bottom: 4px;
+  }
+  .dest-bar-label span:last-child { color: var(--accent); font-weight: 600; }
+  .dest-bar-track {
+    height: 6px; background: var(--bar-track);
+    border-radius: 3px; overflow: hidden;
+  }
+  .dest-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 0.3s;
+  }
+
+  /* ── STAT ROWS ────────────────────────────── */
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row-label { color: var(--text-muted); }
+  .stat-row-value { font-weight: 500; color: var(--text); }
+
+  /* ── BADGES ─────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+  }
+  .badge-green  { background: var(--green-badge-bg);  color: var(--green-badge-text); }
+  .badge-amber  { background: var(--amber-badge-bg);  color: var(--amber-badge-text); }
+  .badge-blue   { background: var(--blue-badge-bg);   color: var(--blue-badge-text); }
+  .badge-gray   { background: var(--gray-badge-bg);   color: var(--gray-badge-text); }
+  .badge-red    { background: var(--red-badge-bg);    color: var(--red-badge-text); }
+
+  /* ── PROGRESS ITEMS ─────────────────────────── */
+  .progress-item {
+    padding: 11px 0; border-bottom: 0.5px solid var(--border); font-size: 13px;
+  }
+  .progress-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .progress-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 8px; margin-bottom: 4px;
+  }
+  .progress-name { font-weight: 500; color: var(--text); flex: 1; }
+  .progress-desc { color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+
+  /* ── TWO COL ─────────────────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── SEARCH TABLE ─────────────────────────────── */
+  .search-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 0.5px solid var(--border); font-size: 12px;
+  }
+  .search-row:last-child { border-bottom: none; }
+  .search-query { font-family: 'SF Mono', monospace; color: var(--text); }
+  .search-stats { display: flex; gap: 14px; color: var(--text-muted); }
+  .search-stats span { min-width: 30px; text-align: right; }
+
+  /* ── CHART ────────────────────────────────────── */
+  .chart-wrap { position: relative; width: 100%; height: 180px; margin-top: 12px; }
+
+  /* ── ENGINEERING ROADMAP ─────────────────────── */
+  .roadmap-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 0.5px solid var(--border);
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    margin-top: 5px; flex-shrink: 0;
+  }
+  .dot-green  { background: var(--accent-mid); }
+  .dot-amber  { background: #e09b20; }
+  .dot-gray   { background: #aabfad; }
+  .dot-blue   { background: #2a74c0; }
+  .roadmap-text { flex: 1; }
+  .roadmap-name { font-weight: 500; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .roadmap-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── FOOTER ─────────────────────────────────── */
+  .footer {
+    text-align: center; padding: 24px 20px 30px;
+    font-size: 11px; color: var(--text-hint);
+    border-top: 0.5px solid var(--border); margin-top: 32px; line-height: 1.8;
+  }
+  .footer-leaf {
+    display: inline-block; width: 24px; height: 2px;
+    background: var(--accent-pale); border-radius: 1px;
+    vertical-align: middle; margin: 0 6px;
+  }
+
+  @media (max-width: 400px) {
+    .metric-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  .note { font-size: 11px; color: var(--text-hint); margin: -2px 0 10px; line-height:1.5; }
+  .progress-meta { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
+
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1a13; --surface:#16241b; --surface-tinted:#1b2e22; --accent:#7fd19b; --accent-mid:#5cbf7e; --accent-light:#4aab6b; --accent-pale:#2b5a3b; --accent-ultralight:#1d3626;
+    --header-bg:#123f23; --border:rgba(127,209,155,0.14); --border-mid:rgba(127,209,155,0.24); --text:#e4f1e8; --text-muted:#a9c7b2; --text-hint:#6f9479; --section-label:#7fc095;
+    --bar-track:rgba(127,209,155,0.12); --green-badge-bg:#1e4a2c; --green-badge-text:#bfe9cc; --amber-badge-bg:#4a3810; --amber-badge-text:#f5d48a; --blue-badge-bg:#163456; --blue-badge-text:#b9d8ff;
+    --gray-badge-bg:#2a332d; --gray-badge-text:#c2cfc5; --red-badge-bg:#4d1c1c; --red-badge-text:#f6c0c0; --highlight-bg:#1b3324; --highlight-border:#4aab6b; --highlight-text:#cfe9d7; --delta-up:#7fd19b; --delta-flat:#6f9479; --delta-down:#f08a8a; } }
+  :root[data-theme="dark"] { --bg:#0f1a13; --surface:#16241b; --surface-tinted:#1b2e22; --accent:#7fd19b; --accent-mid:#5cbf7e; --accent-light:#4aab6b; --accent-pale:#2b5a3b; --accent-ultralight:#1d3626;
+    --header-bg:#123f23; --border:rgba(127,209,155,0.14); --border-mid:rgba(127,209,155,0.24); --text:#e4f1e8; --text-muted:#a9c7b2; --text-hint:#6f9479; --section-label:#7fc095;
+    --bar-track:rgba(127,209,155,0.12); --green-badge-bg:#1e4a2c; --green-badge-text:#bfe9cc; --amber-badge-bg:#4a3810; --amber-badge-text:#f5d48a; --blue-badge-bg:#163456; --blue-badge-text:#b9d8ff;
+    --gray-badge-bg:#2a332d; --gray-badge-text:#c2cfc5; --red-badge-bg:#4d1c1c; --red-badge-text:#f6c0c0; --highlight-bg:#1b3324; --highlight-border:#4aab6b; --highlight-text:#cfe9d7; --delta-up:#7fd19b; --delta-flat:#6f9479; --delta-down:#f08a8a; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Greytt &middot; Tech &amp; Product</div>
+  <h1>Weekly Status Report</h1>
+  <div class="header-sub">Week ending Nov 1, 2026 &nbsp;&middot;&nbsp; Prepared Nov 2, 2026</div>
+  <div class="header-stripe"></div>
+</div>
+
+<div class="content">
+
+  <!-- PLATFORM ACTIVITY -->
+  <div class="section-label">Platform activity &middot; Oct 26 &ndash; Nov 1</div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-label">Itineraries generated</div>
+      <div class="metric-value">59</div>
+      <div class="metric-delta delta-flat">45 external &middot; 14 internal test</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Unique destinations</div>
+      <div class="metric-value">19</div>
+      <div class="metric-delta delta-up">6 Indian cities &middot; 4 in AU/NZ</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Registered quiz escapes</div>
+      <div class="metric-value">9</div>
+      <div class="metric-delta delta-flat">all free escapes ($0)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Itinerary revisions</div>
+      <div class="metric-value">0</div>
+      <div class="metric-delta delta-down">no hotel / activity edits</div>
+    </div>
+  </div>
+
+  <div class="highlight-bar">
+    <strong>Short, partly-internal week.</strong> The export only holds itineraries from Oct 28 onward (none logged Oct 26&ndash;27), and 14 of 59 came from internal accounts, mostly dev testing on Chennai and Delhi. Among the 45 external itineraries, Bali still leads with 8, but Indian domestic trips (Delhi, Chennai, Mumbai, Goa, Bangalore, Agra) made up 14, almost a third of volume. That is a clear shift from the SE&nbsp;Asia-heavy mix seen in May. The first voice-generated itinerary appeared in prod this week.
+  </div>
+
+  <!-- DESTINATIONS -->
+  <div class="section-label">Top destinations &middot; external users</div>
+  <div class="note">Excludes 14 internal test itineraries (Chennai 7, Delhi 3, Agra, Bali, KL, Tokyo 1 each).</div>
+
+  <div class="card">
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Bali, Indonesia</span><span>8</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:100%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Tokyo, Japan</span><span>4</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:50%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Delhi, India</span><span>4</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:50%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Seoul, South Korea</span><span>3</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:38%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Kuala Lumpur, Malaysia</span><span>3</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:38%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Chennai, India</span><span>3</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:38%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Mumbai, India</span><span>3</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:38%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Singapore, Singapore</span><span>2</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:25%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Goa, India</span><span>2</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:25%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Bangkok, Thailand</span><span>2</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:25%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Auckland, New Zealand</span><span>2</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:25%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Phuket, Thailand</span><span>2</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:25%"></div></div>
+    </div>
+    <div class="dest-bar-row">
+      <div class="dest-bar-label"><span>Other (Cebu, Hanoi, Cairns, Melbourne, Adelaide, Bangalore, Agra)</span><span>7</span></div>
+      <div class="dest-bar-track"><div class="dest-bar-fill" style="width:88%"></div></div>
+    </div>
+  </div>
+
+  <!-- USER PROFILE -->
+  <div class="section-label">User profile snapshot</div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Generation method</div>
+      <div class="stat-row"><span class="stat-row-label">Chat</span><span class="stat-row-value">60%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Plan (search)</span><span class="stat-row-value">40%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Voice (internal test)</span><span class="stat-row-value">1 itinerary</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Group type</div>
+      <div class="stat-row"><span class="stat-row-label">Couples</span><span class="stat-row-value">56%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Groups (3+ adults)</span><span class="stat-row-value">20%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Solo</span><span class="stat-row-value">20%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Family w/ children</span><span class="stat-row-value">4%</span></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Top user markets</div>
+      <div class="stat-row"><span class="stat-row-label">India (IN)</span><span class="stat-row-value">71%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Australia (AU)</span><span class="stat-row-value">9%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Other (ZA/BN/CA/BD/PH/GR/ID)</span><span class="stat-row-value">21%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Travel cadence (quiz, n=9)</div>
+      <div class="stat-row"><span class="stat-row-label">Spontaneous</span><span class="stat-row-value">44%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Short quality</span><span class="stat-row-value">33%</span></div>
+      <div class="stat-row"><span class="stat-row-label">Long immersive</span><span class="stat-row-value">22%</span></div>
+    </div>
+  </div>
+  <div class="note">Markets based on 34 external itineraries with a known country; 11 guest itineraries carry no country.</div>
+
+  <!-- EXPERIENCE TYPES -->
+  <div class="section-label">Top experience types this week</div>
+
+  <div class="card">
+    <div class="stat-row"><span class="stat-row-label">Top Attractions</span><span class="stat-row-value">27%</span></div>
+    <div class="stat-row"><span class="stat-row-label">Relaxed &amp; Chill</span><span class="stat-row-value">16%</span></div>
+    <div class="stat-row"><span class="stat-row-label">Culture &amp; History</span><span class="stat-row-value">16%</span></div>
+    <div class="stat-row"><span class="stat-row-label">Natural Wonders</span><span class="stat-row-value">13%</span></div>
+    <div class="stat-row"><span class="stat-row-label">Adventure &amp; Sport</span><span class="stat-row-value">11%</span></div>
+    <div class="stat-row"><span class="stat-row-label">Foodie / Shopping / Arts / Off the beaten path</span><span class="stat-row-value">18%</span></div>
+  </div>
+
+  <!-- TECH & PRODUCT -->
+  <div class="section-label">Tech &amp; product &middot; sprint progress</div>
+
+  <div class="card">
+    <div class="card-title">Shipped / completed this week</div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Pop-up quiz as a standalone URL module</span>
+        <span class="badge badge-green">Completed</span>
+      </div>
+      <div class="progress-desc">Quiz can now run on its own URL, separate from the main flow. Logged Oct 23 as Critical and closed within the week.</div>
+      <div class="progress-meta">greytt.ai &middot; Govarthan</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Tech Cost Optimization Plan v2.0</span>
+        <span class="badge badge-green">Completed</span>
+      </div>
+      <div class="progress-desc">Vercel: cut function duration by removing the Agoda API call on Greytt-curated hotels. Neon: resized DB instances for Partner Portal and Moves.</div>
+      <div class="progress-meta">greytt.ai &middot; Govarthan &middot; due Oct 31</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">APAC chain comparison logic fix</span>
+        <span class="badge badge-green">Completed</span>
+      </div>
+      <div class="progress-desc">Backend comparison logic corrected so scores calculate properly for hotel chains across multiple APAC properties.</div>
+      <div class="progress-meta">partner.greytt.ai &middot; Govarthan &middot; due Oct 31</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Stripe subscription order discrepancy</span>
+        <span class="badge badge-green">Completed</span>
+      </div>
+      <div class="progress-desc">The webhook was dropping invoices with billing_reason &ldquo;subscription_update&rdquo; because only recurring cycles were whitelisted. Fixed, so missing subscription orders now land in the dashboard.</div>
+      <div class="progress-meta">moves.greytt.ai &middot; Vishnu &middot; due Oct 31</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Super admin order cancellation</span>
+        <span class="badge badge-green">Completed</span>
+      </div>
+      <div class="progress-desc">Super admins can now remove or cancel orders.</div>
+      <div class="progress-meta">moves.greytt.ai &middot; Vishnu &middot; due Oct 31</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">OTA demo page data verification</span>
+        <span class="badge badge-green">Prod</span>
+      </div>
+      <div class="progress-desc">Missing hotel info and Grade Scores fixed on the OTA demo page, including the Bangkok demo. Logged Oct 28 and pushed to production.</div>
+      <div class="progress-meta">greytt.ai &middot; unassigned in tracker</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">In progress / staging</div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Improve mobile PageSpeed performance</span>
+        <span class="badge badge-amber">Moved to Staging</span>
+      </div>
+      <div class="progress-desc">Covers LCP and hero image optimisation, JS main-thread work, server response, CSS and layout stability, and build/asset delivery. Regression and cross-device testing come before the prod push.</div>
+      <div class="progress-meta">Govarthan &middot; due Oct 28, prod push pending</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Nearby competitor auto-selection (property intelligence)</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Auto-selects nearby 4-star, 5-star and top-rated hotels based on property location.</div>
+      <div class="progress-meta">partner.greytt.ai &middot; Govarthan &middot; due Oct 28, overdue</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">AI Engineering Upgrade (LLM orchestration + prompt mgmt)</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Platform that lets the business team manage prompts directly.</div>
+      <div class="progress-meta">Madhavan &middot; due Oct 31, overdue</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">WhatsApp assistant for Journeys</span>
+        <span class="badge badge-gray">Status not set</span>
+      </div>
+      <div class="progress-desc">Nine-module build: WhatsApp foundation, user linking, AI conversation engine, destination discovery, itinerary create/modify, personalisation, journey Q&amp;A, state persistence, and hardening for production.</div>
+      <div class="progress-meta">Vishnu &middot; due Nov 11 &middot; status blank in tracker</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Property dashboard research</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Research into property-level data and competitor-insight enhancements.</div>
+      <div class="progress-meta">partner.greytt.ai &middot; Govarthan &middot; due Nov 4</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Lifetime membership 50% discount page</span>
+        <span class="badge badge-amber">Moved to Staging</span>
+      </div>
+      <div class="progress-desc">Restricted-access page that applies an automatic 50% lifetime discount through a special link. Has been in staging since early October.</div>
+      <div class="progress-meta">Govarthan &middot; due Oct 7, awaiting sign-off</div>
+    </div>
+  </div>
+
+  <!-- IN-FLIGHT / ON HOLD -->
+  <div class="section-label">In-flight, on hold &amp; newly logged</div>
+
+  <div class="card">
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">B2B dashboards + Custom Ads (staging)</span>
+        <span class="badge badge-amber">Staging</span>
+      </div>
+      <div class="progress-desc">B2B Intelligence Dashboard (Consumer), B2B Property Dashboard and Custom Ads have been in staging since the Aug 19 deadline. They need a go-live decision.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">B2B API Access v1</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Original deadline was May 13 and it is still open. The partner platform admin is on preview.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Gemini vs Claude: itinerary &amp; audit cost comparison</span>
+        <span class="badge badge-amber">In progress</span>
+      </div>
+      <div class="progress-desc">Output-quality and API-cost comparison sheets are ready. Deadline was Sep 16 and no decision has been logged yet.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Technical documentation: Journeys HLD / LLD</span>
+        <span class="badge badge-gray">Not started</span>
+      </div>
+      <div class="progress-desc">Logged Oct 28 and unassigned. Entered three times in RTB, so the duplicates need consolidating.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Daily error email check</span>
+        <span class="badge badge-gray">Not started</span>
+      </div>
+      <div class="progress-desc">Logged Oct 28 and unassigned. A monitoring routine for the daily error emails.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Delete internal itineraries created in Prod</span>
+        <span class="badge badge-gray">Not started</span>
+      </div>
+      <div class="progress-desc">Logged Oct 30 and unassigned. Internal test itineraries are still inflating prod metrics (14 this week).</div>
+    </div>
+  </div>
+
+  <!-- RISKS -->
+  <div class="section-label">Watch items</div>
+
+  <div class="card">
+    <div class="stat-row"><span class="stat-row-label">Open items past deadline</span><span class="stat-row-value">9 items</span></div>
+    <div class="stat-row"><span class="stat-row-label">New items with no owner</span><span class="stat-row-value">4 items</span></div>
+    <div class="stat-row"><span class="stat-row-label">Items stuck in staging &gt; 2 months</span><span class="stat-row-value">3 items</span></div>
+    <div class="stat-row"><span class="stat-row-label">&ldquo;Date Completed&rdquo; column filled</span><span class="stat-row-value">0 of 19 Oct items</span></div>
+  </div>
+  <div class="note">Because no completion dates are logged, &ldquo;completed this week&rdquo; is inferred from Oct 23&ndash;31 log dates and deadlines.</div>
+
+  <!-- ENGINEERING ROADMAP -->
+  <div class="section-label">Engineering roadmap &middot; status</div>
+
+  <div class="card">
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-green"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Voice AI Pipeline (STT + NLP + LLM + TTS)</div>
+        <div class="roadmap-desc">Voice concierge marked completed (implemented Sep 30). First voice itinerary seen in prod this week. Enhancements continue.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-green"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Multi-city itinerary + hotels / B2B dashboard chat</div>
+        <div class="roadmap-desc">Both moved to production in October. Itinerary latency improvement (Claude-based sights generation) is also completed.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-amber"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">API Gateway + Partner Auth (B2B v1)</div>
+        <div class="roadmap-desc">In progress, long past its Q2 target.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-amber"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Observatory, Cost Controls &amp; Model Telemetry + 3rd-party cost tracking</div>
+        <div class="roadmap-desc">In progress. Cost Plan v2.0 delivered Vercel and Neon savings this week. Tracking of GCP, Vercel, Neon, Storyblok, Klaviyo and Amplitude is ongoing.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-amber"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Ad Targeting + Arbitration / Engagement Analytics</div>
+        <div class="roadmap-desc">In progress, feeding into Advertising Engine v2.0.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-gray"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">Payments + Refunds + Ledger / HA transaction architecture</div>
+        <div class="roadmap-desc">Not started. Tied to the booking engine.</div>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-gray"></div>
+      <div class="roadmap-text">
+        <div class="roadmap-name">User access management sheet</div>
+        <div class="roadmap-desc">Not started (High priority, logged May 21).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPCOMING PRIORITIES -->
+  <div class="section-label">Upcoming priorities &middot; week of Nov 2</div>
+
+  <div class="card">
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Mobile PageSpeed &rarr; production</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Finish regression and cross-device testing, then push to prod and set up ongoing performance monitoring.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Clean internal itineraries out of Prod</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Assign an owner, delete the test itineraries, and filter internal accounts from the weekly export so metrics are clean.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Property dashboard research &rarr; readout</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Due Nov 4. Close out nearby-competitor auto-selection alongside it.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">WhatsApp assistant: foundation modules</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Due Nov 11. Set a tracker status and confirm progress on the WhatsApp integration and user-linking modules.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Advertising Engine v2.0 / custom ad serving</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Due Nov 11 and not yet started. Covers partner portal and auth, creative uploads, hotel mapping CSV, approval workflow, promo codes, and 50+ audience targeting. Needs a kickoff now.</div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">Assign owners for newly logged items</span>
+        <span class="badge badge-blue">Next</span>
+      </div>
+      <div class="progress-desc">Covers HLD/LLD documentation (merge the three duplicate rows), the daily error-email check, and internal itinerary cleanup.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Greytt Tech &amp; Product <span class="footer-leaf"></span> Week ending Nov 1, 2026<br>
+  Prepared Nov 2, 2026 &nbsp;&middot;&nbsp; Data sourced from weekly itinerary DB export &amp; Greytt Tech project tracker
+</div>
+
+<script>
+document.querySelectorAll('.dest-bar-fill').forEach(bar => {
+  const w = bar.style.width;
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = w; }, 120);
+});
+</script>
+</body>
+</html>
